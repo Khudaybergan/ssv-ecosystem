@@ -85,6 +85,10 @@ EXCLUDE_ROWS = {19, 32, 33, 54}
 # №21 — Ҳисоб палатаси: рўйхатга олинган беморлар ва муассасалар маълумоти
 FORCE_LIVE = {21, 56, 60}
 
+# Реестрда «Мавжуд» турса-да, амалда ҳали режада (фойдаланувчи тасдиқлади):
+# №55 — онлайн назорат касса чеклари (Солиқ қўмитаси)
+FORCE_PLAN = {55}
+
 # Икки томонлама алмашинувлар (фойдаланувчи изоҳи):
 # № → {'in': идора ССВга берадигани, 'out': ССВ берадиганига қўшимча банд}
 BIDIR = {
@@ -209,7 +213,7 @@ def main(path):
         status = clean(ws.cell(r, 8).value)
         ag = AGENCY_OF[no]
         short, mark, sys_icon = moh_short(moh)
-        live = status == 'Мавжуд' or no in FORCE_LIVE
+        live = (status == 'Мавжуд' or no in FORCE_LIVE) and no not in FORCE_PLAN
         outgoing = no <= OUTGOING_MAX
         live_rows += 1 if live else 0
         out_rows += 1 if outgoing else 0
