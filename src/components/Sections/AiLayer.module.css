@@ -1,0 +1,212 @@
+/* ============================================================
+   ИИ — отличается тонкой координатной сеткой и «плоскостями»,
+   но остаётся в общей палитре (без неона и киберпанка)
+   ============================================================ */
+.ai {
+  background:
+    linear-gradient(rgba(11, 94, 110, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 94, 110, 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, #fbfdfe, var(--bg));
+  background-size:
+    44px 44px,
+    44px 44px,
+    100% 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.principles {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.principles li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.principles li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--teal-bright), var(--teal-deep));
+}
+
+/* ---------- плоскости ---------- */
+.planes {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  perspective: 900px;
+}
+.plane {
+  border-radius: var(--r-m);
+  padding: 18px 22px;
+  text-align: center;
+  transform: rotateX(28deg);
+  transform-style: preserve-3d;
+  transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease);
+}
+.plane:hover {
+  transform: rotateX(18deg) translateY(-3px);
+}
+.plane b {
+  display: block;
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.plane span {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+}
+
+.planeTop {
+  background: linear-gradient(135deg, var(--teal-deep), var(--teal));
+  color: #fff;
+  box-shadow: 0 24px 40px -20px rgba(11, 94, 110, 0.55);
+  z-index: 3;
+}
+.planeTop span {
+  color: #c9efe9;
+}
+.planeMid {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(14, 140, 127, 0.35);
+  color: var(--ink);
+  box-shadow: var(--shadow-m);
+  z-index: 2;
+}
+.planeMid span {
+  color: var(--teal-deep);
+}
+.planeBase {
+  background: var(--sky);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  z-index: 1;
+}
+.planeBase span {
+  color: var(--muted);
+}
+
+.planeLink {
+  align-self: center;
+  width: 2px;
+  height: 26px;
+  background: linear-gradient(180deg, rgba(18, 165, 148, 0.7), rgba(18, 165, 148, 0.15));
+  position: relative;
+  overflow: hidden;
+}
+.planeLink::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: -6px;
+  width: 4px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--green);
+  animation: rise 2.2s linear infinite;
+}
+@keyframes rise {
+  from {
+    top: 110%;
+  }
+  to {
+    top: -10%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .planeLink::after {
+    display: none;
+  }
+}
+
+/* ---------- направления применения ---------- */
+.caps {
+  margin-top: clamp(40px, 6vw, 64px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.cap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease);
+}
+.cap:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-s);
+  border-color: rgba(14, 140, 127, 0.4);
+}
+.cap b {
+  font-size: 14.5px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+.capSub {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.capStatus {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 10px;
+}
+.stLive {
+  background: var(--green-soft);
+  color: var(--green);
+}
+.stPilot {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+.stPlan {
+  background: rgba(94, 118, 134, 0.12);
+  color: var(--muted);
+}
+
+@media (max-width: 1080px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .caps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .caps {
+    grid-template-columns: 1fr;
+  }
+}

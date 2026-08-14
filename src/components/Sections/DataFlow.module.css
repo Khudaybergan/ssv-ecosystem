@@ -1,0 +1,181 @@
+.data {
+  background: linear-gradient(180deg, var(--bg), var(--sky) 55%, var(--bg));
+}
+
+/* ---------- конвейер ---------- */
+.flowWrap {
+  position: relative;
+  margin-top: 46px;
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 27px;
+  height: 2px;
+  overflow: visible;
+  pointer-events: none;
+}
+.railLine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(14, 140, 127, 0.05), rgba(14, 140, 127, 0.4) 12%, rgba(14, 140, 127, 0.4) 88%, rgba(14, 140, 127, 0.05));
+}
+.railDot {
+  position: absolute;
+  top: -2.5px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal-bright);
+  box-shadow: 0 0 10px rgba(18, 165, 148, 0.8);
+  animation: railRun 4.2s linear infinite;
+}
+@keyframes railRun {
+  from {
+    left: 0%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  to {
+    left: 100%;
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .railDot {
+    display: none;
+  }
+}
+
+.stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+.stage {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  padding: 40px 16px 16px;
+  box-shadow: var(--shadow-s);
+  transition:
+    transform var(--t-med) var(--ease),
+    box-shadow var(--t-med) var(--ease),
+    border-color var(--t-med) var(--ease),
+    opacity var(--t-med) var(--ease);
+  cursor: default;
+}
+.stage::before {
+  /* точка на общей шине */
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2.5px solid var(--teal);
+  transition: background var(--t-fast) var(--ease);
+}
+.stageHot {
+  transform: translateY(-5px);
+  border-color: rgba(14, 140, 127, 0.5);
+  box-shadow: var(--shadow-m);
+}
+.stageHot::before {
+  background: var(--teal-bright);
+}
+.stageDim {
+  opacity: 0.55;
+}
+.stageNum {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+}
+.stageTitle {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.stageSub {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* ---------- факты ---------- */
+.facts {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.fact {
+  border-left: 3px solid var(--teal);
+  padding: 4px 0 4px 16px;
+}
+.fact b {
+  display: block;
+  font-size: 14.5px;
+  letter-spacing: -0.01em;
+}
+.fact span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ---------- адаптив ---------- */
+@media (max-width: 1080px) {
+  .stages {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 34px;
+  }
+  .rail {
+    display: none;
+  }
+  .stage {
+    padding-top: 32px;
+  }
+  .stage::before {
+    top: 14px;
+    left: 16px;
+    transform: none;
+  }
+  .stageNum {
+    top: 12px;
+  }
+  .facts {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .stages {
+    grid-template-columns: 1fr 1fr;
+  }
+}

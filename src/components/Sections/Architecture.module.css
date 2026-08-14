@@ -1,0 +1,171 @@
+.arch {
+  background: linear-gradient(180deg, var(--bg), #fbfdfe 30%, var(--sky));
+}
+
+.stack {
+  position: relative;
+  margin-top: 44px;
+  padding-left: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* вертикальная шина данных */
+.spine {
+  position: absolute;
+  left: 10px;
+  top: 26px;
+  bottom: 26px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(14, 140, 127, 0.1), rgba(14, 140, 127, 0.5) 50%, rgba(14, 140, 127, 0.1));
+  overflow: hidden;
+}
+.spinePulse {
+  position: absolute;
+  left: -2px;
+  width: 6px;
+  height: 26px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, transparent, var(--teal-bright), transparent);
+  animation: spineRun 5s linear infinite;
+}
+@keyframes spineRun {
+  from {
+    top: -10%;
+  }
+  to {
+    top: 105%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinePulse {
+    display: none;
+  }
+}
+
+/* ---------- уровень ---------- */
+.level {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(280px, 1.15fr) 1fr;
+  gap: 12px 24px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  padding: 18px 22px;
+  transition:
+    opacity var(--t-med) var(--ease),
+    transform var(--t-med) var(--ease),
+    border-color var(--t-med) var(--ease),
+    box-shadow var(--t-med) var(--ease);
+}
+.levelDim {
+  opacity: 0.5;
+}
+.levelHot {
+  border-color: rgba(14, 140, 127, 0.5);
+  box-shadow: var(--shadow-m);
+  transform: translateX(4px);
+}
+.levelCore {
+  background: linear-gradient(120deg, rgba(18, 165, 148, 0.1), rgba(255, 255, 255, 0.6) 55%);
+  border-color: rgba(14, 140, 127, 0.42);
+}
+
+/* коннектор к шине */
+.port {
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  width: 22px;
+  height: 2px;
+  background: rgba(14, 140, 127, 0.4);
+}
+.port::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2.5px solid var(--teal);
+  transition: background var(--t-fast) var(--ease);
+}
+.levelHot .port::before {
+  background: var(--teal-bright);
+}
+
+.levelHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-width: 0;
+}
+.levelNum {
+  flex: none;
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--teal-deep);
+  background: var(--sky);
+  border: 1px solid rgba(11, 94, 110, 0.16);
+  border-radius: 8px;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+.levelTitle {
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.levelSub {
+  margin-top: 3px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.chip {
+  padding: 7px 13px;
+  border-radius: 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+.chipLink {
+  background: rgba(18, 165, 148, 0.09);
+  border-color: rgba(14, 140, 127, 0.32);
+  color: var(--teal-deep);
+  cursor: pointer;
+  transition:
+    background var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+.chipLink:hover {
+  background: rgba(18, 165, 148, 0.18);
+  border-color: var(--teal);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .level {
+    grid-template-columns: 1fr;
+  }
+  .chips {
+    justify-content: flex-start;
+  }
+}
