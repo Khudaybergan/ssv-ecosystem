@@ -332,6 +332,15 @@
   position: relative;
   opacity: 0.6;
 }
+.bFlowArrowTwo::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: -2.5px;
+  border-right: 6px solid var(--teal);
+  border-top: 3.5px solid transparent;
+  border-bottom: 3.5px solid transparent;
+}
 .bFlowArrow::after {
   content: '';
   position: absolute;

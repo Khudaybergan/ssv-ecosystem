@@ -250,7 +250,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                       dur={`${l.pulseDur + j * 0.7}s`}
                       begin={`${(-(i * 0.53) - j * (l.pulseDur / 2)).toFixed(2)}s`}
                       repeatCount="indefinite"
-                      keyPoints={l.n.dir === 'in' ? '1;0' : '0;1'}
+                      keyPoints={l.n.dir === 'in' ? '1;0' : l.n.dir === 'both' && j === 1 ? '1;0' : '0;1'}
                       keyTimes="0;1"
                     >
                       <mpath href={`#edge-${l.n.id}`} />

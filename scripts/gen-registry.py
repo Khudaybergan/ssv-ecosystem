@@ -82,6 +82,12 @@ EXCLUDE_ROWS = {54}
 # №56 — вояга етмаганлар, №60 — ҳомиладор аёллар ва бола парвариши
 FORCE_LIVE = {56, 60}
 
+# Икки томонлама алмашинувлар: № → идора ССВга тақдим этадиган маълумот
+# (реестрда фақат ССВ берадигани ёзилган; фойдаланувчи изоҳи)
+BIDIR = {
+    15: '30 ёшгача бўлган ёшлар тўғрисидаги маълумотлар',
+}
+
 YEAR_RE = re.compile(r'(20\d\d)\s*йил')
 
 
@@ -144,10 +150,12 @@ def main(path):
         if basis:
             acts.add(basis)
         year = (YEAR_RE.search(basis) or [None, None])[1]
+        both = no in BIDIR
         moh_step = {'title': short, 'sub': 'ССВ тизими', 'icon': sys_icon}
         ag_step = {'title': AG[ag][1], 'sub': 'ҳамкор идора', 'icon': ag}
         kpis = [
-            {'value': 'ССВ → Идора' if outgoing else 'Идора → ССВ', 'label': 'маълумот йўналиши'},
+            {'value': 'ССВ ⇄ Идора' if both else 'ССВ → Идора' if outgoing else 'Идора → ССВ',
+             'label': 'маълумот йўналиши'},
             {'value': 'Мавжуд' if live else 'Режада', 'label': 'алмашинув ҳолати'},
             {'value': doc_label(doc), 'label': 'ҳужжат ҳолати'},
         ]
@@ -157,16 +165,23 @@ def main(path):
             kpis.append({'value': year, 'label': 'асос йили'})
         panel = [
             {'kind': 'flow', 'title': 'Маълумот оқими',
-             'steps': [moh_step, ag_step] if outgoing else [ag_step, moh_step]},
+             'steps': [moh_step, ag_step] if outgoing or both else [ag_step, moh_step],
+             **({'twoWay': True} if both else {})},
             {'kind': 'kpis', 'items': kpis},
             {'kind': 'list',
              'title': 'ССВ тақдим этадиган маълумотлар' if outgoing else 'ССВга тақдим этиладиган маълумотлар',
              'items': items},
         ]
+        if both:
+            panel.insert(3, {'kind': 'list', 'title': 'Идора ССВга тақдим этадиган маълумотлар',
+                             'items': [BIDIR[no]]})
         if basis:
             panel.append({'kind': 'list', 'title': 'Ҳуқуқий асос', 'items': [basis]})
-        arrow_desc = (f'{short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if outgoing
-                      else f'{AG[ag][0]} → {short}. Идора ССВга маълумот тақдим этади.')
+        if both:
+            arrow_desc = f'{short} ⇄ {AG[ag][0]}. Икки томонлама алмашинув.'
+        else:
+            arrow_desc = (f'{short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if outgoing
+                          else f'{AG[ag][0]} → {short}. Идора ССВга маълумот тақдим этади.')
         if not live:
             arrow_desc += ' 2026 йил охирига режалаштирилган.'
         agency_children[ag].append({
@@ -175,7 +190,7 @@ def main(path):
             'label': trunc(items[0], 20),
             'mark': mark,
             'icon': sys_icon,
-            'dir': 'out' if outgoing else 'in',
+            'dir': 'both' if both else 'out' if outgoing else 'in',
             'desc': f'{arrow_desc} Реестрдаги {no}-алмашинув. Идора тизими: {trunc(partner, 90)}',
             'status': 'live' if live else 'plan',
             'stat': {'value': f'№ {no}', 'label': 'реестр рақами'},

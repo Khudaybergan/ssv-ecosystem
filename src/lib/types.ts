@@ -72,7 +72,7 @@ export type PanelBlock =
   | { kind: 'chips'; title: string; items: ChipItem[] }
   | { kind: 'list'; title: string; items: string[] }
   | { kind: 'bars'; title: string; unit?: string; items: BarItem[] }
-  | { kind: 'flow'; title: string; steps: FlowStep[] }
+  | { kind: 'flow'; title: string; steps: FlowStep[]; twoWay?: boolean }
   | { kind: 'graph'; title: string; center: string; nodes: string[] }
   | { kind: 'stack'; title: string; layers: { title: string; sub: string }[] }
   | { kind: 'link'; label: string; anchor: string }
@@ -89,8 +89,8 @@ export interface EcoNode {
   mark?: string
   /** Ключ иконки организации (см. AGENCY_ICONS) — приоритетнее mark */
   icon?: string
-  /** Направление обмена: out — ССВ передаёт данные, in — ССВ принимает */
-  dir?: 'in' | 'out'
+  /** Направление обмена: out — ССВ передаёт, in — принимает, both — двусторонний */
+  dir?: 'in' | 'out' | 'both'
   /** 1–2 предложения для hover-карточки и панели */
   desc: string
   stat?: { value: string; label: string }

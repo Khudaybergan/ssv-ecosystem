@@ -85,7 +85,9 @@ export function PanelBlockView({ block, onAnchor }: Props) {
                     {st.sub && <small>{st.sub}</small>}
                   </span>
                 </span>
-                {i < block.steps.length - 1 && <span className={s.bFlowArrow} aria-hidden="true" />}
+                {i < block.steps.length - 1 && (
+                  <span className={`${s.bFlowArrow} ${block.twoWay ? s.bFlowArrowTwo : ''}`} aria-hidden="true" />
+                )}
               </div>
             ))}
           </div>
