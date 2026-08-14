@@ -39,9 +39,10 @@ function edgePath(x: number, y: number, k: number): string {
 function layoutLevel(focus: EcoNode): NodeLayout[] {
   const kids = focus.children ?? []
   const c = kids.length
-  const rx = c <= 3 ? 300 : c <= 4 ? 350 : c <= 5 ? 405 : c <= 6 ? 450 : c <= 8 ? 495 : 512
-  const ry = c <= 3 ? 168 : c <= 4 ? 192 : c <= 5 ? 216 : c <= 6 ? 236 : c <= 8 ? 252 : 262
-  const baseR = c <= 8 ? 34 : kids.some((n) => n.icon) ? 28 : 26
+  const rx = c <= 3 ? 300 : c <= 4 ? 350 : c <= 5 ? 405 : c <= 6 ? 450 : c <= 8 ? 495 : c <= 12 ? 512 : c <= 18 ? 520 : 526
+  const ry = c <= 3 ? 168 : c <= 4 ? 192 : c <= 5 ? 216 : c <= 6 ? 236 : c <= 8 ? 252 : c <= 12 ? 262 : c <= 18 ? 268 : 274
+  // катта ҳалқаларда тугунлар ихчамроқ (26 тагача сиғади)
+  const baseR = c <= 8 ? 34 : kids.some((n) => n.icon) ? 28 : c <= 12 ? 26 : c <= 18 ? 24 : 21
   const start = c === 2 ? 0 : -90
   const k = c <= 8 ? 0.08 : 0.05
   // вес тугуна = интеграциялар сони: кўп интеграцияли идора йирикроқ ва йўғонроқ чизиқли
@@ -50,8 +51,10 @@ function layoutLevel(focus: EcoNode): NodeLayout[] {
   const weighted = maxCount > 1
   return kids.map((n, i) => {
     const a = ((start + (360 / c) * i) * Math.PI) / 180
-    const x = CX + rx * Math.cos(a)
-    const y = CY + ry * Math.sin(a)
+    // 19+ тугунда ҳалқа икки қаватли: жуфтлари ичкарироқ — ёзувлар тиқилмайди
+    const st = c > 18 && i % 2 === 0 ? 0.78 : 1
+    const x = CX + rx * st * Math.cos(a)
+    const y = CY + ry * st * Math.sin(a)
     const w = weighted ? (counts[i] / maxCount) ** 0.55 : 0
     const r = baseR - 2 + w * 13
     const ew = 1 + w * 3.2
@@ -321,7 +324,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
           {nodes.map((l) => (
             <g
               key={l.n.id}
-              className={`${s.node} ${l.r < 28 ? s.nodeSm : ''} ${l.n.status === 'plan' && !l.n.children?.length ? s.nodePlan : ''} ${stateOf(l.n.id)}`}
+              className={`${s.node} ${l.r < 28 ? s.nodeSm : ''} ${l.r < 24 ? s.nodeXs : ''} ${l.n.status === 'plan' && !l.n.children?.length ? s.nodePlan : ''} ${stateOf(l.n.id)}`}
               transform={`translate(${l.x.toFixed(1)}, ${l.y.toFixed(1)})`}
               role="button"
               tabIndex={0}
@@ -367,7 +370,10 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                   </g>
                 )}
                 {(() => {
-                  const lines = wrapName(l.n.label ?? l.n.name, 19).slice(0, l.n.children?.length ? 3 : 2)
+                  const lines = wrapName(l.n.label ?? l.n.name, l.r < 24 ? 15 : 19).slice(
+                    0,
+                    l.n.children?.length ? 3 : 2,
+                  )
                   const y0 = l.r + (l.n.status === 'plan' ? 25 : 21)
                   return (
                     <text

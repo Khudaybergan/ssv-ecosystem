@@ -449,6 +449,13 @@ button.crumb:hover {
 .nodeLabelMulti {
   font-size: 12px;
 }
+/* жуда катта ҳалқалар (19+ тугун) учун ихчам ёзувлар */
+.nodeXs .nodeLabel {
+  font-size: 10.5px;
+}
+.nodeXs .nodeMark {
+  font-size: 7.5px;
+}
 
 /* ---------- режадаги (ҳали ишламайдиган) тугунлар ---------- */
 .nodePlan .nodeBody {
