@@ -109,6 +109,30 @@ EXTRA_LEAVES = {
             'live': True,
         },
     ],
+    # ВМнинг 2026 йил 29 январдаги 35-сон қарори бўйича режадаги йўналишлар
+    'social': [
+        {
+            'name': 'Йилда бир марта тўлиқ тиббий кўрикдан ўтказиш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+            'basis': 'Ўзбекистон Республикаси Вазирлар Маҳкамасининг 2026 йил 29 январдаги 35-сон қарори',
+        },
+        {
+            'name': 'Қандли диабетнинг иккинчи тури билан касалланган ҳамда эҳтиёжманд беморларни метформин дори воситаси билан бепул таъминлаш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+            'basis': 'Ўзбекистон Республикаси Вазирлар Маҳкамасининг 2026 йил 29 январдаги 35-сон қарори',
+        },
+        {
+            'name': 'Аллергик ва иммунологик касалликларга чалинган беморларни ингаляцион глюкокортикостероид дори воситалар билан бепул таъминлаш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+            'basis': 'Ўзбекистон Республикаси Вазирлар Маҳкамасининг 2026 йил 29 январдаги 35-сон қарори',
+        },
+    ],
 }
 
 # Вергул бўйича ажратилмайдиган қаторлар: матн — яхлит бир гап
@@ -308,6 +332,32 @@ def main(path):
             out_rows += 1 if e_out else 0
             e_moh = {'title': e_short, 'sub': 'ССВ тизими', 'icon': e_icon}
             e_ag = {'title': AG[ag][1], 'sub': 'ҳамкор идора', 'icon': ag}
+            e_basis = ex.get('basis', '')
+            if e_basis:
+                acts.add(e_basis)
+            e_year = (YEAR_RE.search(e_basis) or [None, None])[1]
+            e_kpis = [
+                {'value': 'ССВ → Идора' if e_out else 'Идора → ССВ', 'label': 'маълумот йўналиши'},
+                {'value': 'Мавжуд' if e_live else 'Режада', 'label': 'алмашинув ҳолати'},
+            ]
+            if not e_live:
+                e_kpis.append({'value': '2026 йил охири', 'label': 'режа муддати'})
+            if e_year:
+                e_kpis.append({'value': e_year, 'label': 'асос йили'})
+            e_panel = [
+                {'kind': 'flow', 'title': 'Маълумот оқими',
+                 'steps': [e_moh, e_ag] if e_out else [e_ag, e_moh]},
+                {'kind': 'kpis', 'items': e_kpis},
+                {'kind': 'list',
+                 'title': 'ССВ тақдим этадиган маълумотлар' if e_out else 'ССВга тақдим этиладиган маълумотлар',
+                 'items': [ex['name']]},
+            ]
+            if e_basis:
+                e_panel.append({'kind': 'list', 'title': 'Ҳуқуқий асос', 'items': [e_basis]})
+            e_desc = (f'{e_short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if e_out
+                      else f'{AG[ag][0]} → {e_short}. Идора ССВга маълумот тақдим этади.')
+            if not e_live:
+                e_desc += ' 2026 йил охирига режалаштирилган.'
             agency_children[ag].append({
                 'id': f'int-x-{ag}-{i + 1}',
                 'name': ex['name'],
@@ -315,21 +365,10 @@ def main(path):
                 'mark': e_mark,
                 'icon': e_icon,
                 'dir': ex['dir'],
-                'desc': (f'{e_short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if e_out
-                         else f'{AG[ag][0]} → {e_short}. Идора ССВга маълумот тақдим этади.'),
+                'desc': e_desc,
                 'status': 'live' if e_live else 'plan',
                 'stat': {'value': 'қўшимча', 'label': 'йўналиш'},
-                'panel': [
-                    {'kind': 'flow', 'title': 'Маълумот оқими',
-                     'steps': [e_moh, e_ag] if e_out else [e_ag, e_moh]},
-                    {'kind': 'kpis', 'items': [
-                        {'value': 'ССВ → Идора' if e_out else 'Идора → ССВ', 'label': 'маълумот йўналиши'},
-                        {'value': 'Мавжуд' if e_live else 'Режада', 'label': 'алмашинув ҳолати'},
-                    ]},
-                    {'kind': 'list',
-                     'title': 'ССВ тақдим этадиган маълумотлар' if e_out else 'ССВга тақдим этиладиган маълумотлар',
-                     'items': [ex['name']]},
-                ],
+                'panel': e_panel,
             })
 
     nodes = []
