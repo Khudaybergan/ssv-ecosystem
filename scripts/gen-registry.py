@@ -98,6 +98,19 @@ BIDIR = {
     },
 }
 
+# Реестр қаторларидан ташқари қўшимча йўналишлар (фойдаланувчи талаби):
+# идора id → [{name, moh_key (MOH_SHORT калити), dir, live}]
+EXTRA_LEAVES = {
+    'adliya': [
+        {
+            'name': 'Туғилиш ва ўлим маълумотномасини олиш',
+            'moh_key': 'Туғилиш ва ўлимни',
+            'dir': 'out',
+            'live': True,
+        },
+    ],
+}
+
 # Вергул бўйича ажратилмайдиган қаторлар: матн — яхлит бир гап
 # (№48 — «...шахслар, шунингдек, уларга тенглаштирилган шахслар»,
 #  №49 — пенсионерларнинг хизмат жойлари санамаси,
@@ -282,6 +295,41 @@ def main(path):
                 'status': 'live' if live else 'plan',
                 'stat': {'value': f'№ {no}', 'label': 'реестр рақами'},
                 'panel': panel,
+            })
+
+    # қўшимча йўналишлар (реестрдан ташқари)
+    for ag, extras in EXTRA_LEAVES.items():
+        for i, ex in enumerate(extras):
+            e_short, e_mark, e_icon = moh_short(ex['moh_key'])
+            e_out = ex['dir'] == 'out'
+            e_live = ex['live']
+            total += 1
+            live_rows += 1 if e_live else 0
+            out_rows += 1 if e_out else 0
+            e_moh = {'title': e_short, 'sub': 'ССВ тизими', 'icon': e_icon}
+            e_ag = {'title': AG[ag][1], 'sub': 'ҳамкор идора', 'icon': ag}
+            agency_children[ag].append({
+                'id': f'int-x-{ag}-{i + 1}',
+                'name': ex['name'],
+                'label': trunc(ex['name'], 20),
+                'mark': e_mark,
+                'icon': e_icon,
+                'dir': ex['dir'],
+                'desc': (f'{e_short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if e_out
+                         else f'{AG[ag][0]} → {e_short}. Идора ССВга маълумот тақдим этади.'),
+                'status': 'live' if e_live else 'plan',
+                'stat': {'value': 'қўшимча', 'label': 'йўналиш'},
+                'panel': [
+                    {'kind': 'flow', 'title': 'Маълумот оқими',
+                     'steps': [e_moh, e_ag] if e_out else [e_ag, e_moh]},
+                    {'kind': 'kpis', 'items': [
+                        {'value': 'ССВ → Идора' if e_out else 'Идора → ССВ', 'label': 'маълумот йўналиши'},
+                        {'value': 'Мавжуд' if e_live else 'Режада', 'label': 'алмашинув ҳолати'},
+                    ]},
+                    {'kind': 'list',
+                     'title': 'ССВ тақдим этадиган маълумотлар' if e_out else 'ССВга тақдим этиладиган маълумотлар',
+                     'items': [ex['name']]},
+                ],
             })
 
     nodes = []

@@ -12,7 +12,7 @@ export const NATIONAL: NationalStats = {
   doctors: 118_300,
   ehrProfiles: 36_800_000,
   digitalServices: 128,
-  integratedSystems: 55,
+  integratedSystems: 56,
   agencies: 14,
   regionsOnline: 14,
   regionsTotal: 14,
@@ -131,7 +131,7 @@ export const ARCH_LEVELS: ArchLevel[] = [
     chips: [
       { label: 'Платформа ядроси', direction: 'platform' },
       { label: 'API-шлюз', direction: 'integrations' },
-      { label: '55 интеграция', direction: 'integrations' },
+      { label: '56 интеграция', direction: 'integrations' },
     ],
   },
   {
