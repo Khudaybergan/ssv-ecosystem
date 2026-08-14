@@ -91,6 +91,10 @@ export interface EcoNode {
   icon?: string
   /** Направление обмена: out — ССВ передаёт, in — принимает, both — двусторонний */
   dir?: 'in' | 'out' | 'both'
+  /** Моно-строка под названием в центре карты (только для корня) */
+  coreMeta?: string
+  /** Заголовок группы детей в мобильном списке */
+  childrenLabel?: string
   /** 1–2 предложения для hover-карточки и панели */
   desc: string
   stat?: { value: string; label: string }

@@ -74,6 +74,43 @@
   letter-spacing: -0.02em;
   line-height: 1.08;
 }
+/* режим переключатели: идоралараро интеграция / электрон рецепт */
+.modeSwitch {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 14px;
+  padding: 4px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-s);
+}
+.modeBtn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--teal-deep);
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition:
+    background var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+  white-space: nowrap;
+}
+.modeBtn:hover {
+  background: rgba(14, 140, 127, 0.08);
+}
+.modeOn {
+  background: var(--teal-deep);
+  color: #fff;
+}
+.modeOn:hover {
+  background: var(--teal-deep);
+}
 .head {
   text-align: center;
   padding-inline: var(--gutter);

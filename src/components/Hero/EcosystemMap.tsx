@@ -9,7 +9,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { EcoNode } from '../../lib/types'
 import { EcoIcon, IconCross } from '../../lib/icons'
-import { REGISTRY_TOTALS } from '../../data/tree'
 import s from './Hero.module.css'
 
 const VB_W = 1240
@@ -287,15 +286,16 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
               {atRoot ? (
                 <>
                   <image href="/emblem.png" x={-36} y={-62} width={72} height={72} />
-                  <text className={s.coreName} y="28" textAnchor="middle">
-                    Соғлиқни сақлаш
-                  </text>
-                  <text className={s.coreName} y="44" textAnchor="middle">
-                    вазирлиги
-                  </text>
-                  <text className={s.coreMeta} y="62" textAnchor="middle">
-                    {REGISTRY_TOTALS.total} ИНТЕГРАЦИЯ · {REGISTRY_TOTALS.agencies} ИДОРА
-                  </text>
+                  {wrapName(root.name, 16).map((line, i, arr) => (
+                    <text key={i} className={s.coreName} y={30 + i * 16 - (arr.length - 1) * 8} textAnchor="middle">
+                      {line}
+                    </text>
+                  ))}
+                  {root.coreMeta && (
+                    <text className={s.coreMeta} y="60" textAnchor="middle">
+                      {root.coreMeta}
+                    </text>
+                  )}
                 </>
               ) : (
                 <>

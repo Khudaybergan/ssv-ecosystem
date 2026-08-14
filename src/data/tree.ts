@@ -15,6 +15,8 @@ export const ECOSYSTEM_ROOT: EcoNode = {
   label: 'ССВ',
   desc: 'Вазирлик ахборот тизимларининг давлат идоралари билан маълумот алмашинуви — ягона рақамли экотизим.',
   stat: { value: String(REGISTRY_TOTALS.total), label: 'интеграция' },
+  coreMeta: `${REGISTRY_TOTALS.total} ИНТЕГРАЦИЯ · ${REGISTRY_TOTALS.agencies} ИДОРА`,
+  childrenLabel: 'Ҳамкор идоралар',
   // марказни босганда «Интеграциялар» тўлиқ панели очилади
   directionId: 'integrations',
   children: GOV_AGENCY_NODES,

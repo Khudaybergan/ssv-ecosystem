@@ -5,7 +5,6 @@
 import { useState } from 'react'
 import type { EcoNode } from '../../lib/types'
 import { EcoIcon, IconArrow } from '../../lib/icons'
-import { REGISTRY_TOTALS } from '../../data/tree'
 import s from './Hero.module.css'
 
 interface Props {
@@ -30,8 +29,8 @@ export function MobileEcosystem({ root, onOpenNode }: Props) {
         <button className={s.mobCore} onClick={() => onOpenNode(root, [root])}>
           <img className={s.mobEmblem} src="/emblem.png" alt="" />
           <span>
-            <span className={s.mobCoreTitle}>Соғлиқни сақлаш вазирлиги</span>
-            <span className={s.mobCoreSub}>{REGISTRY_TOTALS.total} интеграция · {REGISTRY_TOTALS.agencies} идора</span>
+            <span className={s.mobCoreTitle}>{root.name}</span>
+            {root.coreMeta && <span className={s.mobCoreSub}>{root.coreMeta.toLowerCase()}</span>}
           </span>
         </button>
       ) : (
@@ -50,7 +49,7 @@ export function MobileEcosystem({ root, onOpenNode }: Props) {
         </div>
       )}
 
-      <div className={s.mobGroup}>{depth === 0 ? 'Ҳамкор идоралар' : 'Алмашинув йўналишлари'}</div>
+      <div className={s.mobGroup}>{focus.childrenLabel ?? (depth === 0 ? 'Ҳамкор идоралар' : 'Алмашинув йўналишлари')}</div>
       {kids.map((n) => (
         <button key={n.id} className={s.mobRow} onClick={() => enter(n)}>
           <span className={s.mobIcon}>

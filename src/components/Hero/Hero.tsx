@@ -1,5 +1,7 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { EcoNode } from '../../lib/types'
+import { ECOSYSTEM_ROOT } from '../../data/tree'
+import { ERECEPT_ROOT } from '../../data/erecept'
 import { useMedia, usePrefersReducedMotion } from '../../lib/hooks'
 import { EcosystemMap } from './EcosystemMap'
 import { MobileEcosystem } from './MobileEcosystem'
@@ -7,12 +9,19 @@ import heroBg from '../../assets/hero-bg.jpg'
 import s from './Hero.module.css'
 
 interface Props {
-  root: EcoNode
   onOpenNode: (node: EcoNode, path: EcoNode[]) => void
   panelOpen: boolean
 }
 
-export function Hero({ root, onOpenNode, panelOpen }: Props) {
+/** Харита режимлари: идоралараро интеграция ёки «Электрон рецепт» */
+const MODES = [
+  { id: 'gov', label: 'Идоралараро интеграция', root: ECOSYSTEM_ROOT },
+  { id: 'erx', label: 'Электрон рецепт', root: ERECEPT_ROOT },
+] as const
+
+export function Hero({ onOpenNode, panelOpen }: Props) {
+  const [mode, setMode] = useState<(typeof MODES)[number]['id']>('gov')
+  const root = MODES.find((m) => m.id === mode)!.root
   const compact = useMedia('(max-width: 940px)')
   const reduced = usePrefersReducedMotion()
   const finePointer = useMedia('(pointer: fine)')
@@ -46,13 +55,26 @@ export function Hero({ root, onOpenNode, panelOpen }: Props) {
         <div className={s.mapHead}>
           <span className={s.mapEyebrow}>Ўзбекистон Республикаси</span>
           <h1 className={s.mapTitle}>Соғлиқни сақлаш вазирлиги</h1>
+          <div className={s.modeSwitch} role="tablist" aria-label="Харита режими">
+            {MODES.map((m) => (
+              <button
+                key={m.id}
+                role="tab"
+                aria-selected={mode === m.id}
+                className={`${s.modeBtn} ${mode === m.id ? s.modeOn : ''}`}
+                onClick={() => setMode(m.id)}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div ref={mapRef} className={s.mapLayer}>
           {compact ? (
-            <MobileEcosystem root={root} onOpenNode={onOpenNode} />
+            <MobileEcosystem key={mode} root={root} onOpenNode={onOpenNode} />
           ) : (
-            <EcosystemMap root={root} onOpenNode={onOpenNode} panelOpen={panelOpen} reduced={reduced} />
+            <EcosystemMap key={mode} root={root} onOpenNode={onOpenNode} panelOpen={panelOpen} reduced={reduced} />
           )}
         </div>
 

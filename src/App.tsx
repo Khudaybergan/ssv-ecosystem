@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import type { DirectionId, EcoNode, PanelBlock, PanelData } from './lib/types'
 import { DIRECTIONS, DIRECTION_BY_ID } from './data/directions'
-import { ECOSYSTEM_ROOT } from './data/tree'
 import { TopBar } from './components/TopBar/TopBar'
 import { Hero } from './components/Hero/Hero'
 import { InfoPanel } from './components/Panel/InfoPanel'
@@ -81,7 +80,7 @@ export default function App() {
     <>
       <TopBar />
       <main>
-        <Hero root={ECOSYSTEM_ROOT} onOpenNode={openNode} panelOpen={panel !== null} />
+        <Hero onOpenNode={openNode} panelOpen={panel !== null} />
       </main>
       <InfoPanel data={panel} onClose={closePanel} onOpen={openDirection} />
     </>
