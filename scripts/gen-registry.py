@@ -78,6 +78,10 @@ EXCLUDE_AGENCIES = {'pharm'}
 # Чиқарилган реестр қаторлари (фойдаланувчи талаби): №54 — РСП ⇄ Рақамли ҳукумат (Солиқ)
 EXCLUDE_ROWS = {54}
 
+# Реестрда «Жараёнда» деб турса-да, амалда ишлаётган қаторлар (фойдаланувчи тасдиқлади):
+# №56 — вояга етмаганлар, №60 — ҳомиладор аёллар ва бола парвариши
+FORCE_LIVE = {56, 60}
+
 YEAR_RE = re.compile(r'(20\d\d)\s*йил')
 
 
@@ -135,7 +139,7 @@ def main(path):
         status = clean(ws.cell(r, 8).value)
         ag = AGENCY_OF[no]
         short, mark, sys_icon = moh_short(moh)
-        live = status == 'Мавжуд'
+        live = status == 'Мавжуд' or no in FORCE_LIVE
         outgoing = no <= OUTGOING_MAX
         if basis:
             acts.add(basis)
