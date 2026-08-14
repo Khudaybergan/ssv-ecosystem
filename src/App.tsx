@@ -5,12 +5,6 @@ import { ECOSYSTEM_ROOT } from './data/tree'
 import { TopBar } from './components/TopBar/TopBar'
 import { Hero } from './components/Hero/Hero'
 import { InfoPanel } from './components/Panel/InfoPanel'
-import { OpsCenter } from './components/Sections/OpsCenter'
-import { DataFlow } from './components/Sections/DataFlow'
-import { AiLayer } from './components/Sections/AiLayer'
-import { GeoMap } from './components/Sections/GeoMap'
-import { Architecture } from './components/Sections/Architecture'
-import { Footer } from './components/Footer/Footer'
 
 /** Юқори даража йўналишининг тўлиқ панели */
 function panelFromDirection(id: DirectionId): PanelData {
@@ -88,13 +82,7 @@ export default function App() {
       <TopBar />
       <main>
         <Hero root={ECOSYSTEM_ROOT} onOpenNode={openNode} panelOpen={panel !== null} />
-        <OpsCenter />
-        <DataFlow />
-        <AiLayer />
-        <GeoMap />
-        <Architecture onOpen={openDirection} />
       </main>
-      <Footer />
       <InfoPanel data={panel} onClose={closePanel} onOpen={openDirection} />
     </>
   )

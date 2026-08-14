@@ -50,7 +50,8 @@ export const DIRECTIONS: Direction[] = [
     shortName: 'Интеграциялар',
     tagline: 'Давлат, тиббиёт ва ахборот тизимларини ягона рақамли маконда бирлаштириш.',
     ring: 'inner',
-    related: ['platform', 'data'],
+    // сайт фақат интеграция харитасидан иборат — бошқа йўналишларга ўтиш йўқ
+    related: [],
     panel: [
       {
         kind: 'graph',

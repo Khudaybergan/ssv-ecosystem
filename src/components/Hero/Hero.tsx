@@ -57,10 +57,6 @@ export function Hero({ root, onOpenNode, panelOpen }: Props) {
         </div>
 
       </div>
-
-      <a className={s.scrollCue} href="#ops" aria-label="Операцион марказга">
-        <span className={s.scrollDot} />
-      </a>
     </section>
   )
 }
