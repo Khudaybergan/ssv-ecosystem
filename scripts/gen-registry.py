@@ -79,14 +79,19 @@ EXCLUDE_AGENCIES = {'pharm'}
 EXCLUDE_ROWS = {54}
 
 # Реестрда «Жараёнда» деб турса-да, амалда ишлаётган қаторлар (фойдаланувчи тасдиқлади):
-# №56 — вояга етмаганлар, №60 — ҳомиладор аёллар ва бола парвариши
-FORCE_LIVE = {56, 60}
+# №56 — вояга етмаганлар, №60 — ҳомиладор аёллар ва бола парвариши,
+# №21 — Ҳисоб палатаси: рўйхатга олинган беморлар ва муассасалар маълумоти
+FORCE_LIVE = {21, 56, 60}
 
 # Икки томонлама алмашинувлар: № → идора ССВга тақдим этадиган маълумот
 # (реестрда фақат ССВ берадигани ёзилган; фойдаланувчи изоҳи)
 BIDIR = {
     15: '30 ёшгача бўлган ёшлар тўғрисидаги маълумотлар',
 }
+
+# Вергул бўйича ажратилмайдиган қаторлар: матн — яхлит бир гап
+# (№49 — пенсионерларнинг хизмат жойлари санамаси)
+NO_COMMA_SPLIT = {49}
 
 YEAR_RE = re.compile(r'(20\d\d)\s*йил')
 
@@ -113,10 +118,36 @@ def doc_label(doc):
     return 'Ишлаб чиқилмоқда'
 
 
-def split_data(raw):
+CAPS = set('АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯЎҚҒҲABCDEFGHIJKLMNOPQRSTUVWXYZ«"')
+
+
+def comma_split(x):
+    """Бош ҳарф билан бошланадиган банддан олдинги вергул бўйича ажратиш;
+    қавс ичидаги вергуллар ҳисобга олинмайди («(ЭКГ, УТТ, ФГДС)»)."""
+    parts, depth, start = [], 0, 0
+    for i, ch in enumerate(x):
+        if ch == '(':
+            depth += 1
+        elif ch == ')':
+            depth = max(0, depth - 1)
+        elif ch == ',' and depth == 0:
+            j = i + 1
+            while j < len(x) and x[j] == ' ':
+                j += 1
+            if j > i + 1 and j < len(x) and x[j] in CAPS:
+                parts.append(x[start:i])
+                start = j
+    parts.append(x[start:])
+    return parts
+
+
+def split_data(raw, comma=True):
+    # аввал «;» ва янги қатор бўйича, сўнг (истисно бўлмаса) вергул бўйича
     items = [clean(x) for x in re.split(r'[;\n]+', str(raw or ''))]
-    # ячейкадаги «1.», «2)» каби рақамлаш ва четки қўштирноқларни оламиз
-    items = [re.sub(r'^\d+\s*[.)]\s*', '', x).strip('"“” ') for x in items]
+    if comma:
+        items = [p for x in items for p in comma_split(x)]
+    # ячейкадаги «1.», «1.1.», «2)» каби рақамлаш ва четки қўштирноқларни оламиз
+    items = [re.sub(r'^\d+(?:\.\d+)*\s*[.)]\s*', '', x).strip('"“” ') for x in items]
     return [x.rstrip('.').strip() for x in items if x and len(x) > 2]
 
 
@@ -139,7 +170,7 @@ def main(path):
         total += 1
         moh = clean(ws.cell(r, 3).value)
         partner = clean(ws.cell(r, 4).value)
-        items = split_data(ws.cell(r, 5).value) or [clean(ws.cell(r, 5).value)]
+        items = split_data(ws.cell(r, 5).value, comma=no not in NO_COMMA_SPLIT) or [clean(ws.cell(r, 5).value)]
         basis = clean(ws.cell(r, 6).value)
         doc = clean(ws.cell(r, 7).value)
         status = clean(ws.cell(r, 8).value)

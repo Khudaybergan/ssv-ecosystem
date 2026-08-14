@@ -65,8 +65,8 @@ export const DIRECTIONS: Direction[] = [
           { value: '14', label: 'ҳамкор идора' },
           { value: '43', label: 'ССВ тақдим этади' },
           { value: '16', label: 'ССВ қабул қилади' },
-          { value: '49', label: 'мавжуд' },
-          { value: '10', label: 'режада · 2026 йил охири' },
+          { value: '50', label: 'мавжуд' },
+          { value: '9', label: 'режада · 2026 йил охири' },
         ],
       },
       {
