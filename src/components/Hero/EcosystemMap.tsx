@@ -245,14 +245,15 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
               <g className={s.pulses}>
                 {/* Барг даражасида: барг доирасида ССВ тизими белгиси, марказда — идора.
                     out (ССВ → идора): барг → марказ; in (идора → ССВ): марказ → барг.
-                    Идора тугунларида dir йўқ — оқим аралаш. */}
+                    dir йўқ (илдиз: идоралар, э-рецепт ҳамкорлари) — оқим марказдан
+                    ташқарига: ССВдан чиқаётган маълумот. */}
                 {[0, 1].map((j) => (
                   <circle key={j} className={s.pulseDot} r={l.r > 30 ? 3.1 : 2.6}>
                     <animateMotion
                       dur={`${l.pulseDur + j * 0.7}s`}
                       begin={`${(-(i * 0.53) - j * (l.pulseDur / 2)).toFixed(2)}s`}
                       repeatCount="indefinite"
-                      keyPoints={l.n.dir === 'in' ? '1;0' : l.n.dir === 'both' && j === 1 ? '1;0' : '0;1'}
+                      keyPoints={l.n.dir === 'in' ? '1;0' : l.n.dir === 'both' && j === 1  ? '1;0' : l.n.dir ? '0;1' : '1;0'}
                       keyTimes="0;1"
                     >
                       <mpath href={`#edge-${l.n.id}`} />
