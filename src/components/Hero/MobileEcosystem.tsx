@@ -4,7 +4,7 @@
    ============================================================ */
 import { useState } from 'react'
 import type { EcoNode } from '../../lib/types'
-import { EcoIcon, IconArrow } from '../../lib/icons'
+import { AGENCY_LOGOS, EcoIcon, IconArrow, isAgencyLogo } from '../../lib/icons'
 import s from './Hero.module.css'
 
 interface Props {
@@ -54,7 +54,7 @@ export function MobileEcosystem({ root, onOpenNode }: Props) {
         <button key={n.id} className={s.mobRow} onClick={() => enter(n)}>
           <span className={s.mobIcon}>
             {n.icon ? (
-              <EcoIcon id={n.icon} size={21} />
+              isAgencyLogo(n.icon) ? <img className={s.mobLogo} src={AGENCY_LOGOS[n.icon]} alt="" /> : <EcoIcon id={n.icon} size={21} />
             ) : n.mark ? (
               <span className={s.mobMark}>{n.mark}</span>
             ) : (

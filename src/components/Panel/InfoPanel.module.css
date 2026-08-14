@@ -95,6 +95,11 @@
   place-items: center;
   box-shadow: var(--shadow-s);
 }
+.headLogo {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
 .title {
   font-size: clamp(20px, 2.4vw, 26px);
   font-weight: 800;
@@ -318,6 +323,11 @@
   background: #fff;
   border: 1px solid var(--line);
   color: var(--teal-deep);
+}
+.bFlowLogo {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
 }
 .bFlowChip small {
   display: block;

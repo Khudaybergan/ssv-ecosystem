@@ -8,7 +8,7 @@
    ============================================================ */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { EcoNode } from '../../lib/types'
-import { EcoIcon, IconCross } from '../../lib/icons'
+import { AGENCY_LOGOS, AgencyLogoSvg, EcoIcon, IconCross, isAgencyLogo } from '../../lib/icons'
 import s from './Hero.module.css'
 
 const VB_W = 1240
@@ -171,6 +171,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
   }
 
   const centerLines = atRoot ? [] : wrapName(focus.name)
+  const hasFocusLogo = isAgencyLogo(focus.icon)
 
   return (
     <div ref={wrapRef} className={s.mapWrap} tabIndex={-1}>
@@ -185,12 +186,22 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
               {i > 0 && <span className={s.crumbSep}>›</span>}
               {i < depth ? (
                 <button className={s.crumb} onClick={() => upTo(i)}>
-                  {n.icon && <EcoIcon id={n.icon} size={12} className={s.crumbIco} />}
+                  {n.icon &&
+                    (isAgencyLogo(n.icon) ? (
+                      <img className={s.crumbLogo} src={AGENCY_LOGOS[n.icon]} alt="" />
+                    ) : (
+                      <EcoIcon id={n.icon} size={12} className={s.crumbIco} />
+                    ))}
                   {n.label ?? n.name}
                 </button>
               ) : (
                 <span className={`${s.crumb} ${s.crumbCur}`}>
-                  {n.icon && <EcoIcon id={n.icon} size={12} className={s.crumbIco} />}
+                  {n.icon &&
+                    (isAgencyLogo(n.icon) ? (
+                      <img className={s.crumbLogo} src={AGENCY_LOGOS[n.icon]} alt="" />
+                    ) : (
+                      <EcoIcon id={n.icon} size={12} className={s.crumbIco} />
+                    ))}
                   {n.label ?? n.name}
                 </span>
               )}
@@ -300,22 +311,29 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                 </>
               ) : (
                 <>
+                  {hasFocusLogo && (
+                    <image
+                      href={AGENCY_LOGOS[focus.icon!]}
+                      x={-29}
+                      y={-62}
+                      width={58}
+                      height={42}
+                      preserveAspectRatio="xMidYMid meet"
+                    />
+                  )}
                   {centerLines.map((line, i) => {
                     const sp = centerLines.length >= 4 ? 15 : 17
                     return (
                       <text
                         key={i}
                         className={`${s.coreName} ${centerLines.length >= 4 ? s.coreNameSm : ''}`}
-                        y={-8 + i * sp - ((centerLines.length - 1) * sp) / 2}
+                        y={(hasFocusLogo ? 10 : -8) + i * sp - ((centerLines.length - 1) * sp) / 2}
                         textAnchor="middle"
                       >
                         {line}
                       </text>
                     )
                   })}
-                  <text className={s.coreMeta} y="48" textAnchor="middle">
-                    {(focus.children?.length ?? 0).toString()} ТА ЙЎНАЛИШ · ПАНЕЛ →
-                  </text>
                 </>
               )}
             </g>
@@ -342,7 +360,11 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                 <circle className={s.nodeBody} r={l.r} />
                 {l.n.icon ? (
                   <g transform={`translate(${-l.r * 0.56}, ${-l.r * 0.56})`} className={s.nodeIcon}>
-                    <EcoIcon id={l.n.icon} size={l.r * 1.12} />
+                    {isAgencyLogo(l.n.icon) ? (
+                      <AgencyLogoSvg id={l.n.icon} size={l.r * 1.12} />
+                    ) : (
+                      <EcoIcon id={l.n.icon} size={l.r * 1.12} />
+                    )}
                   </g>
                 ) : l.n.mark ? (
                   <text className={s.nodeMark} textAnchor="middle" dy="3.5">
@@ -405,7 +427,11 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
         >
           <span className={s.tipIcon}>
             {hoveredL.n.icon ? (
-              <EcoIcon id={hoveredL.n.icon} size={17} />
+              isAgencyLogo(hoveredL.n.icon) ? (
+                <img className={s.tipLogo} src={AGENCY_LOGOS[hoveredL.n.icon]} alt="" />
+              ) : (
+                <EcoIcon id={hoveredL.n.icon} size={17} />
+              )
             ) : hoveredL.n.mark ? (
               <span className={s.tipMark}>{hoveredL.n.mark}</span>
             ) : (

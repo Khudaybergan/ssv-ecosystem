@@ -5,7 +5,7 @@
    ============================================================ */
 import { useMemo } from 'react'
 import type { ChipStatus, PanelBlock } from '../../lib/types'
-import { EcoIcon, IconArrow } from '../../lib/icons'
+import { AGENCY_LOGOS, EcoIcon, IconArrow, isAgencyLogo } from '../../lib/icons'
 import s from './InfoPanel.module.css'
 
 const STATUS_LABEL: Record<ChipStatus, string> = {
@@ -77,7 +77,11 @@ export function PanelBlockView({ block, onAnchor }: Props) {
                 <span className={s.bFlowChip}>
                   {st.icon && (
                     <i className={s.bFlowIco}>
-                      <EcoIcon id={st.icon} size={16} />
+                      {isAgencyLogo(st.icon) ? (
+                        <img className={s.bFlowLogo} src={AGENCY_LOGOS[st.icon]} alt="" />
+                      ) : (
+                        <EcoIcon id={st.icon} size={16} />
+                      )}
                     </i>
                   )}
                   <span>

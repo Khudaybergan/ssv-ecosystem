@@ -6,7 +6,7 @@
 import { useEffect, useRef } from 'react'
 import type { DirectionId, PanelData } from '../../lib/types'
 import { DIRECTION_BY_ID } from '../../data/directions'
-import { DirectionIcon, EcoIcon, IconClose, IconCross } from '../../lib/icons'
+import { AGENCY_LOGOS, DirectionIcon, EcoIcon, IconClose, IconCross, isAgencyLogo } from '../../lib/icons'
 import { PanelBlockView } from './PanelBlocks'
 import s from './InfoPanel.module.css'
 
@@ -61,7 +61,11 @@ export function InfoPanel({ data, onClose, onOpen }: Props) {
           <div className={s.headMain}>
             <span className={s.headIcon}>
               {data.iconKey ? (
-                <EcoIcon id={data.iconKey} size={26} />
+                isAgencyLogo(data.iconKey) ? (
+                  <img className={s.headLogo} src={AGENCY_LOGOS[data.iconKey]} alt="" />
+                ) : (
+                  <EcoIcon id={data.iconKey} size={26} />
+                )
               ) : data.iconId ? (
                 <DirectionIcon id={data.iconId} size={26} />
               ) : (

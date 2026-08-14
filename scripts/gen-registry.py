@@ -95,7 +95,7 @@ FORCE_PLAN = {55}
 BIDIR = {
     15: {
         'in': '30 ёшгача бўлган ёшлар тўғрисидаги маълумотлар',
-        'out': '30 ёшгача бўлган ёшларнинг касалликлари тўғрисидаги маълумотлар',
+        'out': '30 ёшгача бўлган ёшлар тўғрисидаги маълумотлар',
     },
 }
 
@@ -132,6 +132,45 @@ EXTRA_LEAVES = {
             'dir': 'out',
             'live': False,
             'basis': 'Ўзбекистон Республикаси Вазирлар Маҳкамасининг 2026 йил 29 январдаги 35-сон қарори',
+        },
+    ],
+    'oila': [
+        {
+            'name': 'Онкоскрининг тўғрисида хабардор қилиш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+        },
+        {
+            'name': 'Психотроп воситаларга ружу қўйган ёки мойиллиги бор хотин-қизлар тўғрисида хабардор қилиш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+        },
+        {
+            'name': 'Спиртли ичимликларга ружу қўйган ёки мойиллиги бор хотин-қизлар тўғрисида хабардор қилиш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+        },
+        {
+            'name': 'Сурункали касалликка чалинган хотин-қизлар тўғрисида хабардор қилиш',
+            'moh_key': 'DMED',
+            'dir': 'out',
+            'live': False,
+        },
+    ],
+    # №14 ижтимоий ҳимояда ҳам қолади; фойдаланувчи талаби билан Ёшлар
+    # агентлигида алоҳида йўналиш сифатида ҳам кўрсатилади.
+    'yoshlar': [
+        {
+            'name': 'Йўлланма (ордер) шаклланганлиги тўғрисидаги маълумот (бунда Агентликнинг коллегиал қарори маълумотини интегратсия қилган ҳолда шакллантирилган бўлиши лозим)',
+            'moh_key': 'MIS2',
+            'dir': 'out',
+            'live': True,
+            'registry_no': 14,
+            'count_in_total': False,
+            'basis': 'Ўзбекистон Республика Вазирлар Маҳкамасининг 2025 йил 5 майдаги 294-сон қарори',
         },
     ],
 }
@@ -328,9 +367,11 @@ def main(path):
             e_short, e_mark, e_icon = moh_short(ex['moh_key'])
             e_out = ex['dir'] == 'out'
             e_live = ex['live']
-            total += 1
-            live_rows += 1 if e_live else 0
-            out_rows += 1 if e_out else 0
+            e_count_in_total = ex.get('count_in_total', True)
+            if e_count_in_total:
+                total += 1
+                live_rows += 1 if e_live else 0
+                out_rows += 1 if e_out else 0
             e_moh = {'title': e_short, 'sub': 'ССВ тизими', 'icon': e_icon}
             e_ag = {'title': AG[ag][1], 'sub': 'ҳамкор идора', 'icon': ag}
             e_basis = ex.get('basis', '')
@@ -355,8 +396,11 @@ def main(path):
             ]
             if e_basis:
                 e_panel.append({'kind': 'list', 'title': 'Ҳуқуқий асос', 'items': [e_basis]})
+            e_registry_no = ex.get('registry_no')
             e_desc = (f'{e_short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if e_out
                       else f'{AG[ag][0]} → {e_short}. Идора ССВга маълумот тақдим этади.')
+            if e_registry_no:
+                e_desc += f' Реестрдаги {e_registry_no}-алмашинув.'
             if not e_live:
                 e_desc += ' 2026 йил охирига режалаштирилган.'
             agency_children[ag].append({
@@ -368,7 +412,8 @@ def main(path):
                 'dir': ex['dir'],
                 'desc': e_desc,
                 'status': 'live' if e_live else 'plan',
-                'stat': {'value': 'қўшимча', 'label': 'йўналиш'},
+                'stat': {'value': f'№ {e_registry_no}' if e_registry_no else 'қўшимча',
+                         'label': 'реестр рақами' if e_registry_no else 'йўналиш'},
                 'panel': e_panel,
             })
 

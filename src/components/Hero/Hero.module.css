@@ -283,6 +283,12 @@ button.crumb:hover {
   flex: none;
   color: var(--teal-deep);
 }
+.crumbLogo {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  object-fit: contain;
+}
 
 .orbit {
   fill: none;
@@ -627,6 +633,12 @@ button.crumb:hover {
   color: var(--teal-deep);
   display: grid;
   place-items: center;
+}
+.tipLogo,
+.mobLogo {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
 }
 .tipName {
   font-size: 13.5px;

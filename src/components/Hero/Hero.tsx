@@ -5,7 +5,7 @@ import { ERECEPT_ROOT } from '../../data/erecept'
 import { useMedia, usePrefersReducedMotion } from '../../lib/hooks'
 import { EcosystemMap } from './EcosystemMap'
 import { MobileEcosystem } from './MobileEcosystem'
-import heroBg from '../../assets/hero-bg.jpg'
+import heroBg from '../../../Ministry_of_Health_(Tashkent).jpg'
 import s from './Hero.module.css'
 
 interface Props {

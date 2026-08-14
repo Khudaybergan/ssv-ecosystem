@@ -366,6 +366,30 @@ export function AgencyIcon({ id, ...p }: IconProps & { id: string }) {
   return C ? <>{C(p)}</> : <IconCross {...p} />
 }
 
+/** Официальные логотипы партнёрских ведомств, размещённые в public/logos. */
+export const AGENCY_LOGOS: Record<string, string> = {
+  adliya: '/logos/adliya.jpg',
+  hisob: '/logos/hisob.svg',
+  iiv: '/logos/iiv.png',
+  insurance: '/logos/insurance.png',
+  maktab: '/logos/maktab.png',
+  moliya: '/logos/moliya.png',
+  mudofaa: '/logos/mudofaa.jpg',
+  rh: '/logos/rh.svg',
+  social: '/logos/social.svg',
+  soliq: '/logos/soliq.png',
+  yoshlar: '/logos/yoshlar.svg',
+}
+
+export function isAgencyLogo(id?: string): id is keyof typeof AGENCY_LOGOS {
+  return Boolean(id && AGENCY_LOGOS[id])
+}
+
+/** Логотип для SVG-карты. */
+export function AgencyLogoSvg({ id, size }: { id: keyof typeof AGENCY_LOGOS; size: number }) {
+  return <image href={AGENCY_LOGOS[id]} width={size} height={size} preserveAspectRatio="xMidYMid meet" />
+}
+
 /* ============================================================
    Иконки ахборот тизимлари ССВ (реестрдаги 12 тизим).
    ============================================================ */
