@@ -23,7 +23,7 @@ export const DIRECTIONS: Direction[] = [
         kind: 'kpis',
         items: [
           { value: '12', label: 'ССВ ахборот тизими' },
-          { value: '56', label: 'интеграция' },
+          { value: '55', label: 'интеграция' },
           { value: '99,97 %', label: 'узлуксизлик' },
           { value: '24/7', label: 'иш режими' },
         ],
@@ -62,12 +62,12 @@ export const DIRECTIONS: Direction[] = [
       {
         kind: 'kpis',
         items: [
-          { value: '56', label: 'алмашинув йўналиши' },
+          { value: '55', label: 'алмашинув йўналиши' },
           { value: '14', label: 'ҳамкор идора' },
-          { value: '40', label: 'ССВ тақдим этади' },
+          { value: '39', label: 'ССВ тақдим этади' },
           { value: '16', label: 'ССВ қабул қилади' },
           { value: '48', label: 'мавжуд' },
-          { value: '8', label: 'режада · 2026 йил охири' },
+          { value: '7', label: 'режада · 2026 йил охири' },
         ],
       },
       {
