@@ -13,7 +13,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-social",
     "name": "Ижтимоий ҳимоя миллий агентлиги",
-    "label": "Ижтимоий ҳимоя",
+    "label": "Ижтимоий ҳимоя миллий агентлиги",
     "mark": "ИҲ",
     "icon": "social",
     "desc": "Алмашинув йўналишлари: 17 та, мавжуд: 16 та, режада: 1 та (2026 йил охиригача). ССВ тақдим этади: 13 та · ССВ қабул қилади: 4 та.",
@@ -21,7 +21,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "17",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-8",
@@ -47,7 +46,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -104,7 +103,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "npx"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -172,7 +171,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "mdr"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -228,7 +227,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -288,7 +287,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -355,7 +354,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "mis2"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -412,7 +411,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "mis2"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -480,7 +479,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "hiv"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -547,7 +546,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -614,7 +613,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -681,7 +680,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "canc"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -748,7 +747,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -815,7 +814,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "donor"
               },
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               }
@@ -877,7 +876,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               },
@@ -944,7 +943,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               },
@@ -1011,7 +1010,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               },
@@ -1078,7 +1077,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Ижтимоий ҳимоя",
+                "title": "Ижтимоий ҳимоя миллий агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "social"
               },
@@ -1141,7 +1140,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "5",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-1",
@@ -1491,7 +1489,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-insurance",
     "name": "Давлат тиббий суғурта жамғармаси",
-    "label": "Тиббий суғурта",
+    "label": "Давлат тиббий суғурта жамғармаси",
     "mark": "ДТСЖ",
     "icon": "insurance",
     "desc": "Алмашинув йўналишлари: 3 та, мавжуд: 2 та, режада: 1 та (2026 йил охиригача). ССВ тақдим этади: 3 та.",
@@ -1499,7 +1497,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "3",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-5",
@@ -1525,7 +1522,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "mis2"
               },
               {
-                "title": "Тиббий суғурта",
+                "title": "Давлат тиббий суғурта жамғармаси",
                 "sub": "ҳамкор идора",
                 "icon": "insurance"
               }
@@ -1592,7 +1589,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Тиббий суғурта",
+                "title": "Давлат тиббий суғурта жамғармаси",
                 "sub": "ҳамкор идора",
                 "icon": "insurance"
               }
@@ -1660,7 +1657,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Тиббий суғурта",
+                "title": "Давлат тиббий суғурта жамғармаси",
                 "sub": "ҳамкор идора",
                 "icon": "insurance"
               }
@@ -1720,7 +1717,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "4",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-21",
@@ -2007,7 +2003,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "5",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-26",
@@ -2346,7 +2341,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-iiv",
     "name": "Ички ишлар вазирлиги",
-    "label": "ИИВ",
+    "label": "Ички ишлар вазирлиги",
     "mark": "ИИВ",
     "icon": "iiv",
     "desc": "Алмашинув йўналишлари: 3 та, мавжуд: 3 та. ССВ тақдим этади: 3 та.",
@@ -2354,7 +2349,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "3",
       "label": "алмашинув йўналиши"
     },
-    "status": "live",
     "children": [
       {
         "id": "int-29",
@@ -2380,7 +2374,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "npx"
               },
               {
-                "title": "ИИВ",
+                "title": "Ички ишлар вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "iiv"
               }
@@ -2448,7 +2442,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "ИИВ",
+                "title": "Ички ишлар вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "iiv"
               }
@@ -2504,7 +2498,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "ИИВ",
+                "title": "Ички ишлар вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "iiv"
               }
@@ -2552,7 +2546,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-moliya",
     "name": "Иқтисодиёт ва молия вазирлиги",
-    "label": "Иқтисод-молия",
+    "label": "Иқтисодиёт ва молия вазирлиги",
     "mark": "ИМВ",
     "icon": "moliya",
     "desc": "Алмашинув йўналишлари: 3 та, мавжуд: 2 та, режада: 1 та (2026 йил охиригача). ССВ тақдим этади: 1 та · ССВ қабул қилади: 2 та.",
@@ -2560,7 +2554,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "3",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-34",
@@ -2586,7 +2579,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Иқтисод-молия",
+                "title": "Иқтисодиёт ва молия вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "moliya"
               }
@@ -2653,7 +2646,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Иқтисод-молия",
+                "title": "Иқтисодиёт ва молия вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "moliya"
               },
@@ -2720,7 +2713,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Иқтисод-молия",
+                "title": "Иқтисодиёт ва молия вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "moliya"
               },
@@ -2773,7 +2766,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-mudofaa",
     "name": "Мудофаа вазирлиги",
-    "label": "Мудофаа",
+    "label": "Мудофаа вазирлиги",
     "mark": "МВ",
     "icon": "mudofaa",
     "desc": "Алмашинув йўналишлари: 4 та, мавжуд: 2 та, режада: 2 та (2026 йил охиригача). ССВ тақдим этади: 4 та.",
@@ -2781,7 +2774,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "4",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-19",
@@ -2807,7 +2799,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Мудофаа",
+                "title": "Мудофаа вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "mudofaa"
               }
@@ -2878,7 +2870,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Мудофаа",
+                "title": "Мудофаа вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "mudofaa"
               }
@@ -2953,7 +2945,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Мудофаа",
+                "title": "Мудофаа вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "mudofaa"
               }
@@ -3020,7 +3012,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Мудофаа",
+                "title": "Мудофаа вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "mudofaa"
               }
@@ -3072,7 +3064,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-adliya",
     "name": "Адлия вазирлиги",
-    "label": "Адлия",
+    "label": "Адлия вазирлиги",
     "mark": "АВ",
     "icon": "adliya",
     "desc": "Алмашинув йўналишлари: 2 та, мавжуд: 2 та. ССВ тақдим этади: 1 та · ССВ қабул қилади: 1 та.",
@@ -3080,7 +3072,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "2",
       "label": "алмашинув йўналиши"
     },
-    "status": "live",
     "children": [
       {
         "id": "int-28",
@@ -3106,7 +3097,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Адлия",
+                "title": "Адлия вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "adliya"
               }
@@ -3168,7 +3159,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Адлия",
+                "title": "Адлия вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "adliya"
               },
@@ -3221,7 +3212,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-yoshlar",
     "name": "Ёшлар ишлари агентлиги",
-    "label": "Ёшлар агентлиги",
+    "label": "Ёшлар ишлари агентлиги",
     "mark": "ЁИА",
     "icon": "yoshlar",
     "desc": "Алмашинув йўналишлари: 1 та, мавжуд: 1 та. ССВ тақдим этади: 1 та.",
@@ -3229,7 +3220,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "1",
       "label": "алмашинув йўналиши"
     },
-    "status": "live",
     "children": [
       {
         "id": "int-15",
@@ -3255,7 +3245,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "mis2"
               },
               {
-                "title": "Ёшлар агентлиги",
+                "title": "Ёшлар ишлари агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "yoshlar"
               }
@@ -3304,7 +3294,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-maktab",
     "name": "Мактаб ва мактабгача таълим вазирлиги",
-    "label": "Мактаб таълими",
+    "label": "Мактаб ва мактабгача таълим вазирлиги",
     "mark": "МТВ",
     "icon": "maktab",
     "desc": "Алмашинув йўналишлари: 1 та, мавжуд: 1 та. ССВ тақдим этади: 1 та.",
@@ -3312,7 +3302,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "1",
       "label": "алмашинув йўналиши"
     },
-    "status": "live",
     "children": [
       {
         "id": "int-39",
@@ -3338,7 +3327,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Мактаб таълими",
+                "title": "Мактаб ва мактабгача таълим вазирлиги",
                 "sub": "ҳамкор идора",
                 "icon": "maktab"
               }
@@ -3375,7 +3364,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-oila",
     "name": "Оила ва хотин-қизлар қўмитаси",
-    "label": "Оила қўмитаси",
+    "label": "Оила ва хотин-қизлар қўмитаси",
     "mark": "ОХҚ",
     "icon": "oila",
     "desc": "Алмашинув йўналишлари: 1 та, мавжуд: 1 та. ССВ тақдим этади: 1 та.",
@@ -3383,7 +3372,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "1",
       "label": "алмашинув йўналиши"
     },
-    "status": "live",
     "children": [
       {
         "id": "int-40",
@@ -3409,7 +3397,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Оила қўмитаси",
+                "title": "Оила ва хотин-қизлар қўмитаси",
                 "sub": "ҳамкор идора",
                 "icon": "oila"
               }
@@ -3457,7 +3445,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-tech",
     "name": "Техник тартибга солиш агентлиги",
-    "label": "Техник тартиб",
+    "label": "Техник тартибга солиш агентлиги",
     "mark": "ТТС",
     "icon": "tech",
     "desc": "Алмашинув йўналишлари: 1 та, мавжуд: 1 та. ССВ қабул қилади: 1 та.",
@@ -3465,7 +3453,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "1",
       "label": "алмашинув йўналиши"
     },
-    "status": "live",
     "children": [
       {
         "id": "int-51",
@@ -3486,7 +3473,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Техник тартиб",
+                "title": "Техник тартибга солиш агентлиги",
                 "sub": "ҳамкор идора",
                 "icon": "tech"
               },
@@ -3539,7 +3526,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
   {
     "id": "ag-rh",
     "name": "«Рақамли ҳукумат» платформаси",
-    "label": "Рақамли ҳукумат",
+    "label": "«Рақамли ҳукумат» платформаси",
     "mark": "РҲ",
     "icon": "rh",
     "desc": "Алмашинув йўналишлари: 9 та, мавжуд: 6 та, режада: 3 та (2026 йил охиригача). ССВ тақдим этади: 3 та · ССВ қабул қилади: 6 та.",
@@ -3547,7 +3534,6 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
       "value": "9",
       "label": "алмашинув йўналиши"
     },
-    "status": "plan",
     "children": [
       {
         "id": "int-41",
@@ -3573,7 +3559,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               }
@@ -3640,7 +3626,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               }
@@ -3711,7 +3697,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
                 "icon": "dmed"
               },
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               }
@@ -3773,7 +3759,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               },
@@ -3844,7 +3830,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               },
@@ -3911,7 +3897,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               },
@@ -3978,7 +3964,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               },
@@ -4045,7 +4031,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               },
@@ -4116,7 +4102,7 @@ export const GOV_AGENCY_NODES: EcoNode[] = [
             "title": "Маълумот оқими",
             "steps": [
               {
-                "title": "Рақамли ҳукумат",
+                "title": "«Рақамли ҳукумат» платформаси",
                 "sub": "ҳамкор идора",
                 "icon": "rh"
               },

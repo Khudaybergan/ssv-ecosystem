@@ -446,6 +446,57 @@ button.crumb:hover {
   stroke: rgba(255, 255, 255, 0.9);
   stroke-width: 4px;
 }
+.nodeLabelMulti {
+  font-size: 12px;
+}
+
+/* ---------- режадаги (ҳали ишламайдиган) тугунлар ---------- */
+.nodePlan .nodeBody {
+  stroke: var(--amber);
+  stroke-dasharray: 5 4;
+  fill: #fffaf0;
+}
+.nodePlan .nodeHalo {
+  fill: rgba(201, 138, 44, 0.1);
+}
+.nodePlan .nodeIcon,
+.nodePlan .nodeGlyph circle {
+  color: var(--amber);
+  stroke: var(--amber);
+}
+.nodePlan .nodeGlyph circle:last-child {
+  fill: var(--amber);
+}
+.nodePlan .nodeMark {
+  fill: var(--amber);
+}
+.nodePlan .nodeLabel {
+  fill: var(--muted);
+}
+.planChip {
+  fill: var(--amber);
+  stroke: #fff;
+  stroke-width: 2;
+}
+.planChipText {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: #fff;
+  letter-spacing: 0.06em;
+}
+.edgePlan .edge {
+  stroke: var(--amber);
+  stroke-dasharray: 4 6;
+  opacity: 0.3;
+}
+.edgePlan.hot .edge {
+  stroke: var(--amber);
+  opacity: 0.75;
+}
+.edgePlan .pulses {
+  display: none;
+}
 .nodeMark {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -781,6 +832,21 @@ button.crumb:hover {
 }
 .mobBody {
   min-width: 0;
+}
+.mobPlan {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--amber);
+  background: var(--amber-soft);
+  border: 1px dashed var(--amber);
+  border-radius: 9px;
+  padding: 2px 7px;
+  margin-left: 8px;
+  vertical-align: 2px;
+  white-space: nowrap;
 }
 .mobName {
   display: block;

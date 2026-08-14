@@ -232,11 +232,11 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             />
           )}
 
-          {/* алоқалар + маълумот пульслари */}
+          {/* алоқалар + маълумот пульслари (режадагилар — пунктир, пульссиз) */}
           {nodes.map((l, i) => (
             <g
               key={l.n.id}
-              className={`${s.edgeGroup} ${stateOf(l.n.id)}`}
+              className={`${s.edgeGroup} ${l.n.status === 'plan' && !l.n.children?.length ? s.edgePlan : ''} ${stateOf(l.n.id)}`}
               style={{ '--ew': `${l.ew.toFixed(1)}px` } as React.CSSProperties}
             >
               <path id={`edge-${l.n.id}`} className={s.edge} d={l.edge} />
@@ -321,7 +321,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
           {nodes.map((l) => (
             <g
               key={l.n.id}
-              className={`${s.node} ${l.r < 28 ? s.nodeSm : ''} ${stateOf(l.n.id)}`}
+              className={`${s.node} ${l.r < 28 ? s.nodeSm : ''} ${l.n.status === 'plan' && !l.n.children?.length ? s.nodePlan : ''} ${stateOf(l.n.id)}`}
               transform={`translate(${l.x.toFixed(1)}, ${l.y.toFixed(1)})`}
               role="button"
               tabIndex={0}
@@ -358,9 +358,31 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                     </text>
                   </g>
                 ) : null}
-                <text className={s.nodeLabel} y={l.r + 23} textAnchor="middle">
-                  {l.n.label ?? l.n.name}
-                </text>
+                {l.n.status === 'plan' && !l.n.children?.length && (
+                  <g transform={`translate(0, ${l.r})`}>
+                    <rect className={s.planChip} x="-21" y="-8" width="42" height="16" rx="8" />
+                    <text className={s.planChipText} textAnchor="middle" dy="3.5">
+                      2026
+                    </text>
+                  </g>
+                )}
+                {(() => {
+                  const lines = wrapName(l.n.label ?? l.n.name, 19).slice(0, l.n.children?.length ? 3 : 2)
+                  const y0 = l.r + (l.n.status === 'plan' ? 25 : 21)
+                  return (
+                    <text
+                      className={`${s.nodeLabel} ${lines.length > 1 ? s.nodeLabelMulti : ''}`}
+                      y={y0}
+                      textAnchor="middle"
+                    >
+                      {lines.map((ln, i) => (
+                        <tspan key={i} x="0" dy={i === 0 ? 0 : 13.5}>
+                          {ln}
+                        </tspan>
+                      ))}
+                    </text>
+                  )
+                })()}
               </g>
             </g>
           ))}
