@@ -75,8 +75,10 @@ OUTGOING_MAX = 43
 
 # Харитадан бутунлай чиқарилган идоралар (фойдаланувчи талаби)
 EXCLUDE_AGENCIES = {'pharm'}
-# Чиқарилган реестр қаторлари (фойдаланувчи талаби): №54 — РСП ⇄ Рақамли ҳукумат (Солиқ)
-EXCLUDE_ROWS = {54}
+# Чиқарилган реестр қаторлари (фойдаланувчи талаби):
+# №54 — РСП ⇄ Рақамли ҳукумат (Солиқ);
+# №19, №32, №33 — Мудофаа: улар ўрнига №20 нинг 9 банди алоҳида кўрсатилади
+EXCLUDE_ROWS = {19, 32, 33, 54}
 
 # Реестрда «Жараёнда» деб турса-да, амалда ишлаётган қаторлар (фойдаланувчи тасдиқлади):
 # №56 — вояга етмаганлар, №60 — ҳомиладор аёллар ва бола парвариши,
@@ -97,6 +99,31 @@ BIDIR = {
 #  №49 — пенсионерларнинг хизмат жойлари санамаси,
 #  №58 — «Солиқ кодексига мувофиқ, ...» кириш иборали гап)
 NO_COMMA_SPLIT = {48, 49, 58}
+
+# Битта реестр қатори харитада бир нечта АЛОҲИДА тугун сифатида кўрсатилади
+# (фойдаланувчи талаби): № → банд гуруҳлари, ҳар бир гуруҳ — алоҳида барг.
+# №30 (ИИВ) → 4 тугун: тиббий маълумотлар (+ҳомиладорлик), поликлиника,
+# диагнозлар, касаллик тарихи — ИИВда жами 6 та тугун бўлади.
+SPLIT_ROWS = {
+    30: [
+        ['Беморларнинг тиббий маълумотлари', 'Ҳомиладорлик ҳисобида турганли тўғрисида маълумот'],
+        ['Бириктирилган поликлиникаси тўғрисида маълумот'],
+        ['Қўйилган диагнозлари тўғрисида маълумот'],
+        ['Касаллик тарихи тўғрисида маълумот'],
+    ],
+    # Мудофаа: №20 нинг ҳар бир банди — алоҳида тугун (9 та)
+    20: [
+        ['Антропометрия (бўй, вазн, кўкрак қафаси атрофи ва бошқалар)'],
+        ['Қоннинг тўлиқ таҳлили'],
+        ['Нажаснинг тўлиқ таҳлили'],
+        ['Сийдикнинг тўлиқ таҳлили'],
+        ['Оилавий клиника ва оилавий шифокорга рўйхатдан ўтиш'],
+        ['Амбулатория шароитида рўйхатдан ўтиш'],
+        ['Текширувлар'],
+        ['Инструментал текширувлар (ЭКГ, ультратовуш текшируви, ФГДС)'],
+        ['Эмлашлар'],
+    ],
+}
 
 YEAR_RE = re.compile(r'(20\d\d)\s*йил')
 
@@ -161,6 +188,8 @@ def main(path):
     ws = openpyxl.load_workbook(path, data_only=True).worksheets[0]
     agency_children = {k: [] for k in AG}
     total = 0
+    live_rows = 0
+    out_rows = 0
     acts = set()
     for r in range(4, 65):
         no = ws.cell(r, 2).value
@@ -180,6 +209,8 @@ def main(path):
         short, mark, sys_icon = moh_short(moh)
         live = status == 'Мавжуд' or no in FORCE_LIVE
         outgoing = no <= OUTGOING_MAX
+        live_rows += 1 if live else 0
+        out_rows += 1 if outgoing else 0
         if basis:
             acts.add(basis)
         year = (YEAR_RE.search(basis) or [None, None])[1]
@@ -196,22 +227,8 @@ def main(path):
             kpis.append({'value': '2026 йил охири', 'label': 'режа муддати'})
         if year:
             kpis.append({'value': year, 'label': 'асос йили'})
-        panel = [
-            {'kind': 'flow', 'title': 'Маълумот оқими',
-             'steps': [moh_step, ag_step] if outgoing or both else [ag_step, moh_step],
-             **({'twoWay': True} if both else {})},
-            {'kind': 'kpis', 'items': kpis},
-            {'kind': 'list',
-             'title': 'ССВ тақдим этадиган маълумотлар' if outgoing else 'ССВга тақдим этиладиган маълумотлар',
-             'items': items},
-        ]
-        if both:
-            if BIDIR[no].get('out'):
-                items.insert(0, BIDIR[no]['out'])
-            panel.insert(3, {'kind': 'list', 'title': 'Идора ССВга тақдим этадиган маълумотлар',
-                             'items': [BIDIR[no]['in']]})
-        if basis:
-            panel.append({'kind': 'list', 'title': 'Ҳуқуқий асос', 'items': [basis]})
+        if both and BIDIR[no].get('out'):
+            items.insert(0, BIDIR[no]['out'])
         if both:
             arrow_desc = f'{short} ⇄ {AG[ag][0]}. Икки томонлама алмашинув.'
         else:
@@ -219,22 +236,37 @@ def main(path):
                           else f'{AG[ag][0]} → {short}. Идора ССВга маълумот тақдим этади.')
         if not live:
             arrow_desc += ' 2026 йил охирига режалаштирилган.'
-        agency_children[ag].append({
-            'id': f'int-{no}',
-            'name': items[0],
-            'label': trunc(items[0], 20),
-            'mark': mark,
-            'icon': sys_icon,
-            'dir': 'both' if both else 'out' if outgoing else 'in',
-            'desc': f'{arrow_desc} Реестрдаги {no}-алмашинув. Идора тизими: {trunc(partner, 90)}',
-            'status': 'live' if live else 'plan',
-            'stat': {'value': f'№ {no}', 'label': 'реестр рақами'},
-            'panel': panel,
-        })
+        # SPLIT_ROWS даги қатор бир нечта баргга бўлинади, қолганлари — битта
+        groups = SPLIT_ROWS.get(no, [items])
+        for gi, g_items in enumerate(groups):
+            panel = [
+                {'kind': 'flow', 'title': 'Маълумот оқими',
+                 'steps': [moh_step, ag_step] if outgoing or both else [ag_step, moh_step],
+                 **({'twoWay': True} if both else {})},
+                {'kind': 'kpis', 'items': kpis},
+                {'kind': 'list',
+                 'title': 'ССВ тақдим этадиган маълумотлар' if outgoing else 'ССВга тақдим этиладиган маълумотлар',
+                 'items': g_items},
+            ]
+            if both:
+                panel.insert(3, {'kind': 'list', 'title': 'Идора ССВга тақдим этадиган маълумотлар',
+                                 'items': [BIDIR[no]['in']]})
+            if basis:
+                panel.append({'kind': 'list', 'title': 'Ҳуқуқий асос', 'items': [basis]})
+            agency_children[ag].append({
+                'id': f'int-{no}' if len(groups) == 1 else f'int-{no}-{gi + 1}',
+                'name': g_items[0],
+                'label': trunc(g_items[0], 20),
+                'mark': mark,
+                'icon': sys_icon,
+                'dir': 'both' if both else 'out' if outgoing else 'in',
+                'desc': f'{arrow_desc} Реестрдаги {no}-алмашинув. Идора тизими: {trunc(partner, 90)}',
+                'status': 'live' if live else 'plan',
+                'stat': {'value': f'№ {no}', 'label': 'реестр рақами'},
+                'panel': panel,
+            })
 
     nodes = []
-    active_total = 0
-    outgoing_total = sum(1 for kids in agency_children.values() for k in kids if k['dir'] == 'out')
     for ag, (name, label, mark) in AG.items():
         if ag in EXCLUDE_AGENCIES:
             continue
@@ -242,7 +274,6 @@ def main(path):
         if not kids:
             continue
         active = sum(1 for k in kids if k['status'] == 'live')
-        active_total += active
         planned = len(kids) - active
         out_n = sum(1 for k in kids if k['dir'] == 'out')
         in_n = len(kids) - out_n
@@ -270,16 +301,16 @@ def main(path):
         '   Қайта генерация: python3 scripts/gen-registry.py "<файл.xlsx>"\n'
         '   ============================================================ */\n'
         "import type { EcoNode } from '../lib/types'\n\n"
-        f'export const REGISTRY_TOTALS = {{ total: {total}, active: {active_total}, '
-        f'process: {total - active_total}, agencies: {len(nodes)}, acts: {len(acts)}, '
-        f'outgoing: {outgoing_total}, incoming: {total - outgoing_total} }}\n\n'
+        f'export const REGISTRY_TOTALS = {{ total: {total}, active: {live_rows}, '
+        f'process: {total - live_rows}, agencies: {len(nodes)}, acts: {len(acts)}, '
+        f'outgoing: {out_rows}, incoming: {total - out_rows} }}\n\n'
         '/** Ҳамкор идоралар ва уларнинг интеграциялари (дарахт барглари) */\n'
         'export const GOV_AGENCY_NODES: EcoNode[] = '
     )
     out = header + json.dumps(nodes, ensure_ascii=False, indent=2) + '\n'
     with open('src/data/registry.ts', 'w', encoding='utf-8') as f:
         f.write(out)
-    print(f'registry.ts: {total} integrations, {len(nodes)} agencies, {len(acts)} acts, active {active_total}')
+    print(f'registry.ts: {total} rows, {len(nodes)} agencies, {len(acts)} acts, live {live_rows}, out {out_rows}')
 
 
 if __name__ == '__main__':
