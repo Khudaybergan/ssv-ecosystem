@@ -83,7 +83,7 @@ function layoutLevel(focus: EcoNode): LevelLayout {
         n: hubNode,
         x: CX + rx * 0.47,
         y: CY,
-        r: hubNode ? 33 : 24,
+        r: hubNode ? 36 : 27,
         trunk: '',
         trunkEw: 0,
         count: 0,
@@ -132,7 +132,7 @@ function layoutLevel(focus: EcoNode): LevelLayout {
       r,
       ew: 1 + wOf(dirN) * 3.2,
       edge,
-      viaEw: 1 + wOf(viaN) * 3.2,
+      viaEw: 1.7 + wOf(viaN) * 3.2,
       viaEdge,
       pulseDur: 2.4 + (i % 4) * 0.45,
     }
@@ -141,7 +141,7 @@ function layoutLevel(focus: EcoNode): LevelLayout {
     hub.count += hubNode?.children?.length ?? 0
     if (hubNode) hub.hasOut = true
     hub.trunk = `M${hub.x.toFixed(1)},${hub.y.toFixed(1)} L${CX},${CY}`
-    hub.trunkEw = 1.4 + Math.min(3, hub.count * 0.11)
+    hub.trunkEw = 2.6 + Math.min(3.4, hub.count * 0.12)
   }
   return { ring, hub }
 }
@@ -349,6 +349,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
           {/* магистраль: платформа-хаб → ССВ маркази */}
           {hub && (
             <g className={`${s.edgeGroup} ${trunkState}`} style={{ '--ew': `${hub.trunkEw.toFixed(1)}px` } as React.CSSProperties}>
+              <path className={s.edgeCasing} d={hub.trunk} />
               <path id="edge-trunk" className={s.edgeTrunk} d={hub.trunk} />
               <g className={s.pulses}>
                 {[0, 1, 2].map((j) => (
@@ -376,7 +377,8 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
               style={{ '--ew': `${l.ew.toFixed(1)}px`, '--vew': `${l.viaEw.toFixed(1)}px` } as React.CSSProperties}
             >
               {l.edge && <path id={`edge-${l.n.id}`} className={s.edge} d={l.edge} />}
-              {/* ветка через платформу «Рақамли ҳукумат» */}
+              {/* ветка через платформу «Рақамли ҳукумат» (белая подложка отделяет от фото) */}
+              {l.viaEdge && <path className={s.edgeViaCasing} d={l.viaEdge} />}
               {l.viaEdge && <path id={`via-${l.n.id}`} className={s.edgeVia} d={l.viaEdge} />}
               <g className={s.pulses}>
                 {/* Барг даражасида: барг доирасида ССВ тизими белгиси, марказда — идора.
@@ -400,7 +402,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                 {/* ветка via: путь узел → хаб; in — к хабу, иначе — от хаба к узлу */}
                 {l.viaEdge &&
                   [0, 1].map((j) => (
-                    <circle key={`v${j}`} className={s.pulseDotVia} r={2.6}>
+                    <circle key={`v${j}`} className={s.pulseDotVia} r={3}>
                       <animateMotion
                         dur={`${1.9 + (i % 3) * 0.4 + j * 0.6}s`}
                         begin={`${(-(i * 0.47) - j * 1.1).toFixed(2)}s`}
@@ -576,23 +578,21 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
           ))}
         </g>
 
-        {/* легенда: турдаги чизиқларнинг маъноси */}
-        {hub && (
-          <g className={s.legend} transform={`translate(30, ${VB_H - 46})`} aria-hidden="true">
-            <line className={s.legendDirect} x1="0" y1="0" x2="30" y2="0" />
-            <text className={s.legendText} x="40" dy="3.5">
-              Тўғридан-тўғри алмашинув
-            </text>
-            <g transform="translate(0, 22)">
-              <line className={s.legendVia} x1="0" y1="0" x2="30" y2="0" />
-              <circle className={s.legendViaDot} cx="15" cy="0" r="4" />
-              <text className={s.legendText} x="40" dy="3.5">
-                «Рақамли ҳукумат» идоралараро интеграциялашув платформаси орқали
-              </text>
-            </g>
-          </g>
-        )}
       </svg>
+
+      {/* легенда типов линий — плашка в правом верхнем углу карты */}
+      {hub && (
+        <div className={s.legendBox} aria-hidden="true">
+          <span className={s.legendItem}>
+            <i className={`${s.legendSwatch} ${s.legendSwatchDirect}`} />
+            Тўғридан-тўғри алмашинув
+          </span>
+          <span className={s.legendItem}>
+            <i className={`${s.legendSwatch} ${s.legendSwatchVia}`} />
+            «Рақамли ҳукумат» платформаси орқали
+          </span>
+        </div>
+      )}
 
       {/* hover-карточка */}
       {hoveredL && (

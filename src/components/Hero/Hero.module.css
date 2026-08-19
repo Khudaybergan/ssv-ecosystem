@@ -549,52 +549,70 @@ button.crumb:hover {
 }
 /* ---------- платформа «Рақамли ҳукумат»: синяя шина через хаб ---------- */
 .mapSvg {
-  --rh-blue: #3465c4;
-  --rh-blue-bright: #2554b8;
+  --rh-blue: #2e63d6;
+  --rh-blue-bright: #1d4fc4;
+}
+/* белая подложка под синими линиями — отделяет их от фотофона */
+.edgeCasing,
+.edgeViaCasing {
+  fill: none;
+  stroke: #fff;
+  stroke-width: calc(var(--ew, 2px) + 4px);
+  stroke-linecap: round;
+  opacity: 0.75;
+  transition: opacity var(--t-med) var(--ease);
+}
+.edgeViaCasing {
+  stroke-width: calc(var(--vew, 1.5px) + 4px);
+}
+.edgeGroup.dim .edgeCasing,
+.edgeGroup.dim .edgeViaCasing {
+  opacity: 0.1;
 }
 .edgeVia {
   fill: none;
   stroke: var(--rh-blue);
   stroke-width: var(--vew, 1.5px);
-  opacity: 0.3;
+  opacity: 0.62;
   transition:
     opacity var(--t-med) var(--ease),
     stroke-width var(--t-med) var(--ease);
 }
 .edgeGroup.hot .edgeVia {
   stroke: var(--rh-blue-bright);
-  stroke-width: calc(var(--vew, 1.5px) + 1px);
-  opacity: 0.95;
+  stroke-width: calc(var(--vew, 1.5px) + 1.2px);
+  opacity: 1;
 }
 .edgeGroup.rel .edgeVia {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 .edgeGroup.dim .edgeVia {
-  opacity: 0.06;
+  opacity: 0.07;
 }
 .edgeTrunk {
   fill: none;
   stroke: var(--rh-blue);
   stroke-width: var(--ew, 2px);
-  opacity: 0.45;
+  stroke-linecap: round;
+  opacity: 0.85;
   transition:
     opacity var(--t-med) var(--ease),
     stroke-width var(--t-med) var(--ease);
 }
 .edgeGroup.hot .edgeTrunk {
   stroke: var(--rh-blue-bright);
-  stroke-width: calc(var(--ew, 2px) + 1px);
-  opacity: 0.95;
+  stroke-width: calc(var(--ew, 2px) + 1.2px);
+  opacity: 1;
 }
 .edgeGroup.rel .edgeTrunk {
-  opacity: 0.7;
+  opacity: 0.95;
 }
 .edgeGroup.dim .edgeTrunk {
-  opacity: 0.08;
+  opacity: 0.1;
 }
 .pulseDotVia {
   fill: var(--rh-blue);
-  opacity: 0.85;
+  opacity: 0.95;
 }
 .edgeGroup.dim .pulseDotVia {
   opacity: 0.08;
@@ -615,14 +633,14 @@ button.crumb:hover {
 /* хаб платформы: корневой узел и декоративный на внутренних уровнях */
 .hubNode .nodeBody {
   stroke: var(--rh-blue);
-  stroke-width: 1.6;
+  stroke-width: 2.2;
 }
 .hubHalo {
-  fill: none;
+  fill: rgba(46, 99, 214, 0.07);
   stroke: var(--rh-blue);
-  stroke-width: 1;
+  stroke-width: 1.2;
   stroke-dasharray: 3 6;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 .hubMini {
   transition: opacity var(--t-med) var(--ease);
@@ -634,38 +652,70 @@ button.crumb:hover {
 .hubBody {
   fill: #fff;
   stroke: var(--rh-blue);
-  stroke-width: 1.4;
+  stroke-width: 2;
 }
 .hubLabel {
-  font-size: 11.5px;
-  font-weight: 650;
+  font-size: 12.5px;
+  font-weight: 700;
   fill: var(--ink);
 }
 .hubSub {
-  font-size: 9.5px;
+  font-size: 10px;
   fill: var(--muted);
   letter-spacing: 0.02em;
 }
-/* легенда типов линий */
-.legendDirect {
-  stroke: var(--teal);
-  stroke-width: 2.5;
-  opacity: 0.75;
+/* легенда типов линий — HTML-плашка в правом верхнем углу карты */
+.legendBox {
+  position: absolute;
+  z-index: 5;
+  top: 6px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 11px 15px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(11, 64, 60, 0.08);
 }
-.legendVia {
-  stroke: var(--rh-blue);
-  stroke-width: 2.5;
-  opacity: 0.85;
-}
-.legendViaDot {
-  fill: #fff;
-  stroke: var(--rh-blue);
-  stroke-width: 1.4;
-}
-.legendText {
-  font-size: 11.5px;
-  fill: var(--muted);
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink);
   letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.legendSwatch {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+}
+.legendSwatchDirect {
+  background: var(--teal);
+}
+.legendSwatchVia {
+  background: #2e63d6;
+}
+.legendSwatchVia::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.6px solid #2e63d6;
+  box-sizing: border-box;
 }
 .nodeMark {
   font-family: var(--font-mono);
