@@ -75,14 +75,32 @@ function layoutLevel(focus: EcoNode): LevelLayout {
   // катта ҳалқаларда тугунлар ихчамроқ (26 тагача сиғади)
   const baseR = c <= 8 ? 34 : kids.some((n) => n.icon) ? 28 : c <= 12 ? 26 : c <= 18 ? 24 : 21
   const step = 360 / Math.max(c, 1)
-  // via-гуруҳ ўнг томонда (0° атрофида марказлашган); хабсиз даража — аввалгидек
-  const start = hasHub && viaKids.length > 0 ? -((viaKids.length - 1) * step) / 2 : c === 2 ? 0 : -90
+  // via-гуруҳ юқори ўнг секторда (хаб биссектрисаси −44° атрофида марказлашган);
+  // дуга разведена на два подсектора, между ними «чистая полоса» (lane) под
+  // хаб и магистраль; хабсиз даража — аввалгидек
+  const HUB_DEG = -44
+  const nVia = viaKids.length
+  const S = (nVia - 1) * step
+  const start = hasHub && nVia > 0 ? HUB_DEG - S / 2 : c === 2 ? 0 : -90
+  const lane = Math.min(84, Math.max(24, 56 - nVia * 2))
+  const nUp = Math.ceil(nVia / 2)
+  const nLo = nVia - nUp
+  const viaAngle = (i: number) => {
+    const upEnd = HUB_DEG - lane / 2
+    const loStart = HUB_DEG + lane / 2
+    const a1 = HUB_DEG + S / 2
+    if (i < nUp) return nUp === 1 ? (start + upEnd) / 2 : start + ((upEnd - start) * i) / (nUp - 1)
+    const j = i - nUp
+    return nLo === 1 ? (loStart + a1) / 2 : loStart + ((a1 - loStart) * j) / (nLo - 1)
+  }
   const k = c <= 8 ? 0.08 : 0.05
+  const hubA = (HUB_DEG * Math.PI) / 180
+  const hubF = hubNode ? 0.86 : 0.62
   const hub: HubLayout | null = hasHub
     ? {
         n: hubNode,
-        x: CX + rx * 0.47,
-        y: CY,
+        x: CX + rx * hubF * Math.cos(hubA),
+        y: CY + ry * hubF * Math.sin(hubA),
         r: hubNode ? 36 : 27,
         trunk: '',
         trunkEw: 0,
@@ -97,7 +115,8 @@ function layoutLevel(focus: EcoNode): LevelLayout {
   const weighted = maxCount > 1
   const wOf = (m: number) => (weighted ? (m / maxCount) ** 0.55 : 0)
   const ring = kids.map((n, i) => {
-    const a = ((start + step * i) * Math.PI) / 180
+    const angDeg = hasHub && nVia > 0 && i < nVia ? viaAngle(i) : start + step * i
+    const a = (angDeg * Math.PI) / 180
     // 19+ тугунда ҳалқа икки қаватли: жуфтлари ичкарироқ — ёзувлар тиқилмайди
     const st = c > 18 && i % 2 === 0 ? 0.78 : 1
     const x = CX + rx * st * Math.cos(a)
@@ -482,23 +501,6 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             </g>
           </g>
 
-          {/* декоратив платформа-хаб (ички даражаларда) */}
-          {hub && !hub.n && (
-            <g className={`${s.hubMini} ${trunkState}`} transform={`translate(${hub.x.toFixed(1)}, ${hub.y.toFixed(1)})`}>
-              <circle className={s.hubHalo} r={hub.r + 8} />
-              <circle className={s.hubBody} r={hub.r} />
-              <g transform={`translate(${-hub.r * 0.56}, ${-hub.r * 0.56})`}>
-                <AgencyLogoSvg id="rh" size={hub.r * 1.12} />
-              </g>
-              <text className={s.hubLabel} y={hub.r + 17} textAnchor="middle">
-                «Рақамли ҳукумат»
-              </text>
-              <text className={s.hubSub} y={hub.r + 30} textAnchor="middle">
-                интеграция платформаси
-              </text>
-            </g>
-          )}
-
           {/* даража тугунлари (илдизда охиргиси — платформа хаби) */}
           {drawNodes.map((l) => (
             <g
@@ -576,8 +578,25 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
               </g>
             </g>
           ))}
-        </g>
 
+          {/* декоратив платформа-хаб (ички даражаларда) — тугунлардан кейин,
+              яқин ёзувлар устидан тоза кўриниши учун */}
+          {hub && !hub.n && (
+            <g className={`${s.hubMini} ${trunkState}`} transform={`translate(${hub.x.toFixed(1)}, ${hub.y.toFixed(1)})`}>
+              <circle className={s.hubHalo} r={hub.r + 8} />
+              <circle className={s.hubBody} r={hub.r} />
+              <g transform={`translate(${-hub.r * 0.56}, ${-hub.r * 0.56})`}>
+                <AgencyLogoSvg id="rh" size={hub.r * 1.12} />
+              </g>
+              <text className={s.hubLabel} y={hub.r + 17} textAnchor="middle">
+                «Рақамли ҳукумат»
+              </text>
+              <text className={s.hubSub} y={hub.r + 30} textAnchor="middle">
+                интеграция платформаси
+              </text>
+            </g>
+          )}
+        </g>
       </svg>
 
       {/* легенда типов линий — плашка в правом верхнем углу карты */}

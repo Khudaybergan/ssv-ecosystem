@@ -668,13 +668,13 @@ button.crumb:hover {
 .legendBox {
   position: absolute;
   z-index: 5;
-  top: 6px;
-  right: 10px;
+  bottom: 8px;
+  left: 12px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding: 11px 15px;
-  background: rgba(255, 255, 255, 0.9);
+  gap: 6px;
+  padding: 9px 13px;
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--line);
@@ -684,8 +684,8 @@ button.crumb:hover {
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 9px;
-  font-size: 12.5px;
+  gap: 8px;
+  font-size: 12px;
   font-weight: 550;
   color: var(--ink);
   letter-spacing: 0.01em;
