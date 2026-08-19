@@ -547,25 +547,123 @@ button.crumb:hover {
 .edgePlan .pulses {
   display: none;
 }
-/* бейдж «через платформу Рақамли ҳукумат» на линии связи */
-.viaBadge {
-  transition: opacity var(--t-med) var(--ease);
+/* ---------- платформа «Рақамли ҳукумат»: синяя шина через хаб ---------- */
+.mapSvg {
+  --rh-blue: #3465c4;
+  --rh-blue-bright: #2554b8;
 }
-.viaBadgeBg {
-  fill: #fff;
-  stroke: var(--teal);
-  stroke-width: 1.1;
+.edgeVia {
+  fill: none;
+  stroke: var(--rh-blue);
+  stroke-width: var(--vew, 1.5px);
+  opacity: 0.3;
+  transition:
+    opacity var(--t-med) var(--ease),
+    stroke-width var(--t-med) var(--ease);
+}
+.edgeGroup.hot .edgeVia {
+  stroke: var(--rh-blue-bright);
+  stroke-width: calc(var(--vew, 1.5px) + 1px);
   opacity: 0.95;
 }
-.edgeGroup.dim .viaBadge {
-  opacity: 0.1;
+.edgeGroup.rel .edgeVia {
+  opacity: 0.6;
 }
-.edgeGroup.hot .viaBadgeBg {
-  stroke: var(--teal-bright);
+.edgeGroup.dim .edgeVia {
+  opacity: 0.06;
+}
+.edgeTrunk {
+  fill: none;
+  stroke: var(--rh-blue);
+  stroke-width: var(--ew, 2px);
+  opacity: 0.45;
+  transition:
+    opacity var(--t-med) var(--ease),
+    stroke-width var(--t-med) var(--ease);
+}
+.edgeGroup.hot .edgeTrunk {
+  stroke: var(--rh-blue-bright);
+  stroke-width: calc(var(--ew, 2px) + 1px);
+  opacity: 0.95;
+}
+.edgeGroup.rel .edgeTrunk {
+  opacity: 0.7;
+}
+.edgeGroup.dim .edgeTrunk {
+  opacity: 0.08;
+}
+.pulseDotVia {
+  fill: var(--rh-blue);
+  opacity: 0.85;
+}
+.edgeGroup.dim .pulseDotVia {
+  opacity: 0.08;
+}
+.edgeGroup.hot .pulseDotVia {
+  fill: var(--rh-blue-bright);
+  opacity: 1;
+}
+.edgePlan .edgeVia {
+  stroke: var(--amber);
+  stroke-dasharray: 4 6;
+  opacity: 0.3;
+}
+.edgePlan.hot .edgeVia {
+  stroke: var(--amber);
+  opacity: 0.75;
+}
+/* хаб платформы: корневой узел и декоративный на внутренних уровнях */
+.hubNode .nodeBody {
+  stroke: var(--rh-blue);
   stroke-width: 1.6;
 }
-.viaLegendText {
-  font-size: 11px;
+.hubHalo {
+  fill: none;
+  stroke: var(--rh-blue);
+  stroke-width: 1;
+  stroke-dasharray: 3 6;
+  opacity: 0.5;
+}
+.hubMini {
+  transition: opacity var(--t-med) var(--ease);
+  pointer-events: none;
+}
+.hubMini.dim {
+  opacity: 0.25;
+}
+.hubBody {
+  fill: #fff;
+  stroke: var(--rh-blue);
+  stroke-width: 1.4;
+}
+.hubLabel {
+  font-size: 11.5px;
+  font-weight: 650;
+  fill: var(--ink);
+}
+.hubSub {
+  font-size: 9.5px;
+  fill: var(--muted);
+  letter-spacing: 0.02em;
+}
+/* легенда типов линий */
+.legendDirect {
+  stroke: var(--teal);
+  stroke-width: 2.5;
+  opacity: 0.75;
+}
+.legendVia {
+  stroke: var(--rh-blue);
+  stroke-width: 2.5;
+  opacity: 0.85;
+}
+.legendViaDot {
+  fill: #fff;
+  stroke: var(--rh-blue);
+  stroke-width: 1.4;
+}
+.legendText {
+  font-size: 11.5px;
   fill: var(--muted);
   letter-spacing: 0.01em;
 }
