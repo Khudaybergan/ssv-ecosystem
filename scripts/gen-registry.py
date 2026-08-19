@@ -277,6 +277,7 @@ def main(path):
     total = 0
     live_rows = 0
     out_rows = 0
+    via_rows = 0
     acts = set()
     for r in range(4, 65):
         no = ws.cell(r, 2).value
@@ -293,20 +294,27 @@ def main(path):
         doc = clean(ws.cell(r, 7).value)
         status = clean(ws.cell(r, 8).value)
         ag = AGENCY_OF[no]
+        # Идора тизими устунида «Рақамли ҳукумат» платформаси кўрсатилган —
+        # алмашинув тўғридан-тўғри эмас, платформа орқали (РҲнинг ўз
+        # қаторлари бундан мустасно: улар платформанинг ўзи билан алмашинув)
+        via = 'рақамли ҳукумат' in partner.lower() and ag != 'rh'
         short, mark, sys_icon = moh_short(moh)
         live = (status == 'Мавжуд' or no in FORCE_LIVE) and no not in FORCE_PLAN
         outgoing = no <= OUTGOING_MAX
         live_rows += 1 if live else 0
         out_rows += 1 if outgoing else 0
+        via_rows += 1 if via else 0
         if basis:
             acts.add(basis)
         year = (YEAR_RE.search(basis) or [None, None])[1]
         both = no in BIDIR
         moh_step = {'title': short, 'sub': 'ССВ тизими', 'icon': sys_icon}
         ag_step = {'title': AG[ag][1], 'sub': 'ҳамкор идора', 'icon': ag}
+        via_step = {'title': '«Рақамли ҳукумат»', 'sub': 'интеграция платформаси', 'icon': 'rh'}
         kpis = [
             {'value': 'ССВ ⇄ Идора' if both else 'ССВ → Идора' if outgoing else 'Идора → ССВ',
              'label': 'маълумот йўналиши'},
+            {'value': 'Платформа орқали' if via else 'Тўғридан-тўғри', 'label': 'уланиш тури'},
             {'value': 'Мавжуд' if live else 'Режада', 'label': 'алмашинув ҳолати'},
             {'value': doc_label(doc), 'label': 'ҳужжат ҳолати'},
         ]
@@ -321,6 +329,8 @@ def main(path):
         else:
             arrow_desc = (f'{short} → {AG[ag][0]}. ССВ маълумот тақдим этади.' if outgoing
                           else f'{AG[ag][0]} → {short}. Идора ССВга маълумот тақдим этади.')
+        if via:
+            arrow_desc += ' Алмашинув «Рақамли ҳукумат» платформаси орқали.'
         if not live:
             arrow_desc += ' 2026 йил охирига режалаштирилган.'
         # SPLIT_ROWS — қўлда белгиланган гуруҳлар; акс ҳолда кўп бандли қатор
@@ -333,10 +343,13 @@ def main(path):
             groups = [items]
         # тугун номи ва банд матни бош ҳарф билан бошлансин
         groups = [[(g[0].upper() + g[1:]) if g else g for g in grp] for grp in groups]
+        chain = [moh_step, ag_step] if outgoing or both else [ag_step, moh_step]
+        if via:
+            chain.insert(1, via_step)
         for gi, g_items in enumerate(groups):
             panel = [
                 {'kind': 'flow', 'title': 'Маълумот оқими',
-                 'steps': [moh_step, ag_step] if outgoing or both else [ag_step, moh_step],
+                 'steps': chain,
                  **({'twoWay': True} if both else {})},
                 {'kind': 'kpis', 'items': kpis},
                 {'kind': 'list',
@@ -355,6 +368,7 @@ def main(path):
                 'mark': mark,
                 'icon': sys_icon,
                 'dir': 'both' if both else 'out' if outgoing else 'in',
+                **({'via': True} if via else {}),
                 'desc': f'{arrow_desc} Реестрдаги {no}-алмашинув. Идора тизими: {trunc(partner, 90)}',
                 'status': 'live' if live else 'plan',
                 'stat': {'value': f'№ {no}', 'label': 'реестр рақами'},
@@ -428,6 +442,7 @@ def main(path):
         planned = len(kids) - active
         out_n = sum(1 for k in kids if k['dir'] == 'out')
         in_n = len(kids) - out_n
+        via_n = sum(1 for k in kids if k.get('via'))
         flows = ' · '.join(
             ([f'ССВ тақдим этади: {out_n} та'] if out_n else []) + ([f'ССВ қабул қилади: {in_n} та'] if in_n else []),
         )
@@ -437,9 +452,11 @@ def main(path):
             'label': label,
             'mark': mark,
             'icon': ag,
+            **({'via': True} if via_n else {}),
             'desc': f'Алмашинув йўналишлари: {len(kids)} та, мавжуд: {active} та'
             + (f', режада: {planned} та (2026 йил охиригача)' if planned else '')
-            + f'. {flows}.',
+            + f'. {flows}.'
+            + (f' {via_n} та йўналиш «Рақамли ҳукумат» платформаси орқали.' if via_n else ''),
             'stat': {'value': str(len(kids)), 'label': 'алмашинув йўналиши'},
             'children': kids,
         })
@@ -461,7 +478,8 @@ def main(path):
     out = header + json.dumps(nodes, ensure_ascii=False, indent=2) + '\n'
     with open('src/data/registry.ts', 'w', encoding='utf-8') as f:
         f.write(out)
-    print(f'registry.ts: {total} rows, {len(nodes)} agencies, {len(acts)} acts, live {live_rows}, out {out_rows}')
+    print(f'registry.ts: {total} rows, {len(nodes)} agencies, {len(acts)} acts, '
+          f'live {live_rows}, out {out_rows}, via-platform {via_rows}')
 
 
 if __name__ == '__main__':

@@ -547,6 +547,28 @@ button.crumb:hover {
 .edgePlan .pulses {
   display: none;
 }
+/* бейдж «через платформу Рақамли ҳукумат» на линии связи */
+.viaBadge {
+  transition: opacity var(--t-med) var(--ease);
+}
+.viaBadgeBg {
+  fill: #fff;
+  stroke: var(--teal);
+  stroke-width: 1.1;
+  opacity: 0.95;
+}
+.edgeGroup.dim .viaBadge {
+  opacity: 0.1;
+}
+.edgeGroup.hot .viaBadgeBg {
+  stroke: var(--teal-bright);
+  stroke-width: 1.6;
+}
+.viaLegendText {
+  font-size: 11px;
+  fill: var(--muted);
+  letter-spacing: 0.01em;
+}
 .nodeMark {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -888,6 +910,21 @@ button.crumb:hover {
 }
 .mobBody {
   min-width: 0;
+}
+.mobVia {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--teal-deep);
+  background: rgba(18, 165, 148, 0.09);
+  border: 1px solid rgba(18, 165, 148, 0.35);
+  border-radius: 9px;
+  padding: 2px 7px;
+  margin-left: 8px;
+  vertical-align: 2px;
+  white-space: nowrap;
 }
 .mobPlan {
   font-style: normal;

@@ -64,6 +64,7 @@ export function MobileEcosystem({ root, onOpenNode }: Props) {
           <span className={s.mobBody}>
             <span className={s.mobName}>
               {n.name}
+              {n.via && !n.children?.length && <em className={s.mobVia}>РҲ платформаси орқали</em>}
               {n.status === 'plan' && !n.children?.length && <em className={s.mobPlan}>режада · 2026</em>}
             </span>
             <span className={s.mobTag}>{n.desc}</span>

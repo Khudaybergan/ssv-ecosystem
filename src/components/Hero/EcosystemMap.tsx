@@ -25,13 +25,10 @@ interface NodeLayout {
   /** Толщина линии связи (px) — весомее у идор с бо́льшим числом интеграций */
   ew: number
   edge: string
+  /** Середина дуги — бейдж «через платформу Рақамли ҳукумат» */
+  vx: number
+  vy: number
   pulseDur: number
-}
-
-function edgePath(x: number, y: number, k: number): string {
-  const mx = (x + CX) / 2 + (CY - y) * k
-  const my = (y + CY) / 2 + (x - CX) * k
-  return `M${x.toFixed(1)},${y.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${CX},${CY}`
 }
 
 /** Даража жойлашуви: тугунлар сонига қараб битта ҳалқа. */
@@ -57,7 +54,20 @@ function layoutLevel(focus: EcoNode): NodeLayout[] {
     const w = weighted ? (counts[i] / maxCount) ** 0.55 : 0
     const r = baseR - 2 + w * 13
     const ew = 1 + w * 3.2
-    return { n, x, y, r, ew, edge: edgePath(x, y, k), pulseDur: 2.4 + (i % 4) * 0.45 }
+    const mx = (x + CX) / 2 + (CY - y) * k
+    const my = (y + CY) / 2 + (x - CX) * k
+    return {
+      n,
+      x,
+      y,
+      r,
+      ew,
+      edge: `M${x.toFixed(1)},${y.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${CX},${CY}`,
+      // квадратик Безье при t=0.5: B = P0/4 + C/2 + P1/4
+      vx: 0.25 * x + 0.5 * mx + 0.25 * CX,
+      vy: 0.25 * y + 0.5 * my + 0.25 * CY,
+      pulseDur: 2.4 + (i % 4) * 0.45,
+    }
   })
 }
 
@@ -272,6 +282,20 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
                   </circle>
                 ))}
               </g>
+              {/* алмашинув «Рақамли ҳукумат» платформаси орқали — линиядаги бейдж */}
+              {l.n.via && (
+                <g className={s.viaBadge} transform={`translate(${l.vx.toFixed(1)}, ${l.vy.toFixed(1)})`}>
+                  <circle className={s.viaBadgeBg} r="8.5" />
+                  <image
+                    href={AGENCY_LOGOS.rh}
+                    x={-5.5}
+                    y={-5.5}
+                    width={11}
+                    height={11}
+                    preserveAspectRatio="xMidYMid meet"
+                  />
+                </g>
+              )}
             </g>
           ))}
 
@@ -416,6 +440,24 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             </g>
           ))}
         </g>
+
+        {/* легенда: линиядаги РҲ-бейджнинг маъноси */}
+        {nodes.some((l) => l.n.via) && (
+          <g className={s.viaLegend} transform={`translate(30, ${VB_H - 20})`} aria-hidden="true">
+            <circle className={s.viaBadgeBg} r="8.5" cx="8" />
+            <image
+              href={AGENCY_LOGOS.rh}
+              x={2.5}
+              y={-5.5}
+              width={11}
+              height={11}
+              preserveAspectRatio="xMidYMid meet"
+            />
+            <text className={s.viaLegendText} x="24" dy="3.5">
+              — «Рақамли ҳукумат» идоралараро интеграциялашув платформаси орқали
+            </text>
+          </g>
+        )}
       </svg>
 
       {/* hover-карточка */}
