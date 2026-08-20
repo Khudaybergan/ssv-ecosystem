@@ -30,7 +30,9 @@ export function PanelBlockView({ block, onAnchor }: Props) {
         <div className={s.bKpis}>
           {block.items.map((k) => (
             <div key={k.label} className={s.bKpi}>
-              <span className={s.bKpiValue}>{k.value}</span>
+              <span className={`${s.bKpiValue} ${/^[\d\s.,%+-]+$/.test(k.value) ? s.bKpiNum : ''}`}>
+                {k.value}
+              </span>
               <span className={s.bKpiLabel}>{k.label}</span>
             </div>
           ))}

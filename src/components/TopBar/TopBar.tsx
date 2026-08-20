@@ -1,19 +1,13 @@
-import { useEffect, useState } from 'react'
 import s from './TopBar.module.css'
 
-/** Юқори панель: фақат герб ва вазирлик номи (навигациясиз). */
+/**
+ * Ҳужжат сарлавҳаси: чапда — герб ва вазирлик номи, ўнгда — харита
+ * асосланган реестрнинг расмий манбаси. Пастда икки қатор ҳошия
+ * (латун + сиёҳ) — расмий бланк чизиғи.
+ */
 export function TopBar() {
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   return (
-    <header className={`${s.bar} ${scrolled ? s.solid : ''}`}>
+    <header className={s.bar}>
       <a className={s.brand} href="#ecosystem">
         <img className={s.emblem} src="/emblem.png" alt="Соғлиқни сақлаш вазирлиги герби" />
         <span className={s.brandText}>
@@ -21,6 +15,12 @@ export function TopBar() {
           <span className={s.brandMain}>Соғлиқни сақлаш вазирлиги</span>
         </span>
       </a>
+      <dl className={s.meta}>
+        <dt className={s.metaKey}>Ҳужжат</dt>
+        <dd className={s.metaVal}>«Интеграция қилинадиган АТлар» реестри</dd>
+        <dt className={s.metaKey}>Ҳолат санаси</dt>
+        <dd className={s.metaVal}>30.03.2026</dd>
+      </dl>
     </header>
   )
 }

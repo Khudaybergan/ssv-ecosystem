@@ -1,5 +1,5 @@
 /* ============================================================
-   Hero + орбитальная карта экосистемы
+   Ҳужжат варағи: сарлавҳа, харита майдони, таг реквизитлари
    ============================================================ */
 .hero {
   position: relative;
@@ -10,38 +10,20 @@
   overflow: hidden;
 }
 
-/* ---------- фон: панорама + светлая дымка ---------- */
-.bg {
+/* ---------- полотно: қоғоз ва ўлчов тўри ---------- */
+.canvas {
   position: absolute;
   inset: 0;
   z-index: 0;
-}
-.bgImgWrap {
-  position: absolute;
-  inset: 0;
-  transform: scale(1.04);
-  transition: transform 0.3s var(--ease);
-  will-change: transform;
-}
-.bgImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 62%;
-}
-.bgHaze {
-  position: absolute;
-  inset: 0;
   background:
-    radial-gradient(1100px 520px at 50% 34%, rgba(255, 255, 255, 0.68), transparent 72%),
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.94) 0%,
-      rgba(255, 255, 255, 0.7) 24%,
-      rgba(244, 249, 252, 0.52) 55%,
-      rgba(244, 249, 252, 0.9) 85%,
-      var(--bg) 100%
-    );
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 34px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 34px 100%,
+    radial-gradient(1200px 640px at 50% 36%, #ffffff 0%, rgba(255, 255, 255, 0) 74%),
+    var(--paper);
+  background-blend-mode: normal;
+  opacity: 1;
+  mask-image: radial-gradient(1300px 760px at 50% 42%, #000 42%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 100%);
+  -webkit-mask-image: radial-gradient(1300px 760px at 50% 42%, #000 42%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 100%);
 }
 
 /* ---------- контент ---------- */
@@ -53,81 +35,74 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 .mapHead {
   text-align: center;
-  padding: clamp(14px, 2.6vh, 30px) var(--gutter) 0;
-}
-.mapEyebrow {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: var(--fs-micro);
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--teal-deep);
+  padding: clamp(12px, 2.2vh, 26px) var(--gutter) 0;
 }
 .mapTitle {
-  margin-top: 8px;
-  font-size: clamp(24px, 3vw, 38px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  font-family: var(--font-display);
+  font-size: clamp(23px, 2.9vw, 37px);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  color: var(--ink);
 }
-/* режим переключатели: идоралараро интеграция / электрон рецепт */
-.modeSwitch {
-  display: inline-flex;
-  gap: 4px;
-  margin-top: 14px;
-  padding: 4px;
-  border-radius: 13px;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-s);
-}
-.modeBtn {
+/* латун ҳошия — сарлавҳа ва ҳужжат номи орасида */
+.mapCaption {
+  position: relative;
+  margin-top: 13px;
+  padding-top: 13px;
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.07em;
+  font-weight: 500;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  font-weight: 600;
-  color: var(--teal-deep);
-  padding: 8px 16px;
-  border-radius: 10px;
+  color: var(--muted);
+}
+.mapCaption::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 78px;
+  height: 2px;
+  background: var(--brass);
+}
+
+/* режим танлагич: расмий сегментли бошқарув */
+.modeSwitch {
+  display: inline-flex;
+  margin-top: 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-s);
+  background: var(--surface);
+  overflow: hidden;
+}
+.modeBtn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: var(--ink-soft);
+  padding: 9px 20px;
   transition:
     background var(--t-fast) var(--ease),
     color var(--t-fast) var(--ease);
   white-space: nowrap;
 }
+.modeBtn + .modeBtn {
+  border-left: 1px solid var(--line-strong);
+}
 .modeBtn:hover {
-  background: rgba(14, 140, 127, 0.08);
+  background: var(--paper-2);
 }
-.modeOn {
-  background: var(--teal-deep);
-  color: #fff;
-}
+.modeOn,
 .modeOn:hover {
-  background: var(--teal-deep);
-}
-.head {
-  text-align: center;
-  padding-inline: var(--gutter);
-}
-.title {
-  margin-top: 13px;
-  font-size: var(--fs-hero);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.06;
-}
-.sub {
-  margin: 12px auto 0;
-  max-width: 46em;
-  font-size: clamp(14.5px, 1.4vw, 18px);
-  line-height: 1.55;
-  color: var(--ink-soft);
+  background: var(--gov-deep);
+  color: #fff;
 }
 
 .mapLayer {
@@ -136,52 +111,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s var(--ease);
-  will-change: transform;
 }
 
-.hint {
-  margin: 0 0 52px;
-  text-align: center;
-  font-size: 12.5px;
-  color: var(--muted);
-  padding-inline: var(--gutter);
-}
-
-.scrollCue {
-  position: absolute;
-  z-index: 3;
-  left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  width: 26px;
-  height: 44px;
-  border: 1.5px solid var(--line-strong);
-  border-radius: 14px;
+/* ---------- ҳужжат таги: кўрсаткичлар ва манба ---------- */
+.sheetFoot {
+  width: min(1720px, calc(100% - 2 * var(--gutter)));
+  margin: 0 auto;
+  padding: 11px 0 16px;
+  border-top: 1px solid var(--line-strong);
   display: flex;
-  justify-content: center;
-  padding-top: 8px;
-  background: rgba(255, 255, 255, 0.5);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
-.scrollDot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--teal);
-  animation: cueDown 1.8s var(--ease) infinite;
+.facts {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  margin: 0;
+  flex-wrap: wrap;
 }
-@keyframes cueDown {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(18px);
-    opacity: 0;
-  }
+.fact {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+.factV {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.factK {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.source {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--faint);
 }
 
 /* ============================================================
@@ -191,7 +167,7 @@
   position: relative;
   /* ширина = высота × аспект viewBox (1240/660), чтобы svg занимал бокс
      без letterbox — тогда %-координаты hover-карточки точны */
-  width: min(1720px, 98vw, max(880px, calc((100svh - 218px) * 1.879)));
+  width: min(1720px, 97vw, max(840px, calc((100svh - 300px) * 1.879)));
   margin-inline: auto;
 }
 .mapSvg {
@@ -218,26 +194,23 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 7px 12px 7px 8px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-s);
+  padding: 6px 12px 6px 6px;
+  border-radius: var(--r-s);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
   animation: tipIn 0.25s var(--ease);
   max-width: min(560px, 90%);
 }
 .backBtn {
   width: 30px;
   height: 30px;
-  border-radius: 9px;
+  border-radius: var(--r-s);
   display: grid;
   place-items: center;
   font-size: 15px;
   font-weight: 700;
   color: #fff;
-  background: var(--teal-deep);
+  background: var(--gov-deep);
   transition:
     background var(--t-fast) var(--ease),
     transform var(--t-fast) var(--ease);
@@ -292,10 +265,10 @@ button.crumb:hover {
 
 .orbit {
   fill: none;
-  stroke: var(--teal-deep);
+  stroke: var(--ink);
   stroke-width: 1;
-  stroke-dasharray: 2 9;
-  opacity: 0.14;
+  stroke-dasharray: 1 7;
+  opacity: 0.16;
 }
 
 /* ---------- связи ---------- */
@@ -304,33 +277,33 @@ button.crumb:hover {
 }
 .edge {
   fill: none;
-  stroke: var(--teal);
+  stroke: var(--petrol);
   stroke-width: var(--ew, 1.5px);
-  opacity: 0.22;
+  opacity: 0.62;
   transition:
     opacity var(--t-med) var(--ease),
     stroke-width var(--t-med) var(--ease);
 }
 .edgeGroup.hot .edge {
-  stroke: var(--teal-bright);
+  stroke: var(--petrol-bright);
   stroke-width: calc(var(--ew, 1.5px) + 1px);
-  opacity: 0.9;
+  opacity: 1;
 }
 .edgeGroup.rel .edge {
-  opacity: 0.55;
+  opacity: 0.7;
 }
 .edgeGroup.dim .edge {
-  opacity: 0.05;
+  opacity: 0.07;
 }
 .pulseDot {
-  fill: var(--teal-bright);
-  opacity: 0.85;
+  fill: var(--petrol);
+  opacity: 0.9;
 }
 .edgeGroup.dim .pulseDot {
   opacity: 0.08;
 }
 .edgeGroup.hot .pulseDot {
-  fill: var(--green);
+  fill: var(--petrol-bright);
   opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -345,40 +318,27 @@ button.crumb:hover {
   outline: none;
 }
 .coreGlow {
-  animation: glowPulse 6s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-@keyframes glowPulse {
-  0%,
-  100% {
-    opacity: 0.75;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
+  display: none;
 }
 .coreSpin {
   transform-origin: 620px 330px;
-  animation: spin 80s linear infinite;
 }
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* гербий медальон ҳошияси — латун ва сиёҳ ингичка чизиқ */
 .coreDash {
   fill: none;
-  stroke: var(--teal);
-  stroke-width: 1.6;
-  stroke-dasharray: 2 11;
-  stroke-linecap: round;
-  opacity: 0.55;
+  stroke: var(--brass);
+  stroke-width: 1;
+  opacity: 0.75;
+}
+.coreRule {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1;
+  opacity: 0.3;
 }
 .coreDiscC {
-  filter: drop-shadow(0 18px 30px rgba(10, 90, 110, 0.28));
+  stroke: var(--line-strong);
+  stroke-width: 1;
   transition: transform var(--t-med) var(--ease);
   transform-box: fill-box;
   transform-origin: center;
@@ -388,18 +348,17 @@ button.crumb:hover {
   transform: scale(1.04);
 }
 .core:focus-visible .coreDiscC {
-  stroke: var(--teal-bright);
+  stroke: var(--gov);
   stroke-width: 2;
 }
 .coreCross {
   color: var(--teal);
 }
 .coreTitle {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   fill: var(--ink);
-  letter-spacing: -0.01em;
 }
 .coreSub {
   font-family: var(--font-sans);
@@ -409,19 +368,20 @@ button.crumb:hover {
 }
 .coreMeta {
   font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.09em;
+  font-size: 8.2px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   fill: var(--muted);
 }
 .coreNameSm {
   font-size: 12.5px !important;
 }
 .coreName {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 700;
   fill: var(--ink);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 /* ---------- узлы ---------- */
@@ -443,7 +403,7 @@ button.crumb:hover {
   opacity: 0.34;
 }
 .nodeHalo {
-  fill: rgba(18, 165, 148, 0.14);
+  fill: var(--petrol-soft);
   opacity: 0;
   transition: opacity var(--t-med) var(--ease);
 }
@@ -454,35 +414,34 @@ button.crumb:hover {
 }
 .nodeBody {
   fill: #ffffff;
-  stroke: rgba(14, 140, 127, 0.5);
-  stroke-width: 1.6;
-  filter: drop-shadow(0 8px 16px rgba(10, 80, 105, 0.2));
+  stroke: var(--line-strong);
+  stroke-width: 1.2;
   transition:
     stroke var(--t-med) var(--ease),
     stroke-width var(--t-med) var(--ease);
 }
 .nodeInner .nodeBody {
-  fill: #f2fbf9;
-  stroke: rgba(14, 140, 127, 0.65);
+  fill: var(--surface-2);
+  stroke: var(--line-strong);
 }
 .node.hot .nodeBody,
 .node:focus-visible .nodeBody {
-  stroke: var(--teal-bright);
-  stroke-width: 2.6;
+  stroke: var(--petrol);
+  stroke-width: 2.4;
 }
 .node.rel .nodeBody {
-  stroke: var(--teal-bright);
-  stroke-width: 2;
+  stroke: var(--petrol);
+  stroke-width: 1.8;
 }
 .nodeIcon {
-  color: var(--teal-deep);
+  color: var(--gov-deep);
 }
 .nodeInner .nodeIcon {
-  color: var(--teal);
+  color: var(--petrol);
 }
 .nodeLabel {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   fill: var(--ink);
   paint-order: stroke;
@@ -549,8 +508,8 @@ button.crumb:hover {
 }
 /* ---------- платформа «Рақамли ҳукумат»: дуга-шлюз ---------- */
 .mapSvg {
-  --rh-blue: #2e63d6;
-  --rh-blue-bright: #1d4fc4;
+  --rh-blue: var(--gov);
+  --rh-blue-bright: var(--gov-deep);
 }
 /* белая подложка под синими линиями — отделяет их от фотофона */
 .edgeCasing {
@@ -699,21 +658,19 @@ button.crumb:hover {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 9px 13px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(11, 64, 60, 0.08);
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--r-s);
 }
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   font-size: 12px;
-  font-weight: 550;
-  color: var(--ink);
+  font-weight: 700;
+  color: var(--ink-soft);
   letter-spacing: 0.01em;
   white-space: nowrap;
 }
@@ -725,10 +682,10 @@ button.crumb:hover {
   border-radius: 2px;
 }
 .legendSwatchDirect {
-  background: var(--teal);
+  background: var(--petrol);
 }
 .legendSwatchVia {
-  background: #2e63d6;
+  background: var(--gov);
 }
 .legendSwatchVia::after {
   content: '';
@@ -740,7 +697,7 @@ button.crumb:hover {
   height: 8px;
   border-radius: 50%;
   background: #fff;
-  border: 1.6px solid #2e63d6;
+  border: 1.6px solid var(--gov);
   box-sizing: border-box;
 }
 .nodeMark {
@@ -788,12 +745,11 @@ button.crumb:hover {
   position: absolute;
   z-index: 5;
   width: 268px;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  padding: 13px 15px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-top: 3px solid var(--gov-deep);
+  border-radius: var(--r-s);
   box-shadow: var(--shadow-m);
   display: grid;
   grid-template-columns: 24px 1fr;
@@ -899,7 +855,7 @@ button.crumb:hover {
   top: 76px;
   bottom: 30px;
   width: 2px;
-  background: linear-gradient(180deg, rgba(18, 165, 148, 0.45), rgba(18, 165, 148, 0.06));
+  background: linear-gradient(180deg, var(--line-strong), transparent);
 }
 .mobCore {
   position: relative;
@@ -909,11 +865,11 @@ button.crumb:hover {
   align-items: center;
   gap: 14px;
   text-align: left;
-  padding: 16px;
-  border-radius: 18px;
+  padding: 15px 16px;
+  border-radius: var(--r-s);
   color: #fff;
-  background: linear-gradient(135deg, var(--teal-deep), var(--teal-bright));
-  box-shadow: var(--shadow-m);
+  background: var(--gov-deep);
+  border-top: 3px solid var(--brass);
 }
 .mobCoreDisc {
   width: 44px;
@@ -927,8 +883,9 @@ button.crumb:hover {
 }
 .mobCoreTitle {
   display: block;
+  font-family: var(--font-display);
   font-size: 15.5px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.25;
 }
 .mobCoreSub {
@@ -973,8 +930,9 @@ button.crumb:hover {
 }
 .mobFocusName {
   display: block;
+  font-family: var(--font-display);
   font-size: 15.5px;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.25;
 }
 .mobFocusDesc {
@@ -1042,10 +1000,10 @@ button.crumb:hover {
   margin: 20px 0 10px;
   padding-left: 54px;
   font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--muted);
 }
 .mobRow {
   position: relative;
@@ -1055,9 +1013,9 @@ button.crumb:hover {
   align-items: flex-start;
   gap: 12px;
   text-align: left;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-s);
   padding: 12px 14px;
   margin-bottom: 8px;
   transition:
@@ -1069,14 +1027,14 @@ button.crumb:hover {
   transform: scale(0.985);
 }
 .mobRow:hover {
-  border-color: rgba(14, 140, 127, 0.45);
+  border-color: var(--petrol);
   box-shadow: var(--shadow-s);
 }
 .mobIcon {
   width: 40px;
   height: 40px;
   flex: none;
-  border-radius: 12px;
+  border-radius: var(--r-s);
   background: var(--sky);
   color: var(--teal-deep);
   display: grid;
@@ -1117,6 +1075,7 @@ button.crumb:hover {
 }
 .mobName {
   display: block;
+  font-family: var(--font-display);
   font-size: 14.5px;
   font-weight: 700;
   line-height: 1.3;

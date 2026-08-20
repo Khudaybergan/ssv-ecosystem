@@ -1,64 +1,90 @@
 /* ============================================================
-   Design tokens — единая цифровая экосистема здравоохранения
-   Палитра: белый / светло-голубой / бирюза / глубокий сине-зелёный /
-   свежий зелёный / нейтральный серый (по брифу, без неона)
+   Design tokens — ССВ идоралараро интеграция харитаси.
+
+   Расмий ҳужжат тили: сиёҳ (матн), қоғоз (полотно), латун (гербий
+   ҳошиялар), давлат кўки («Рақамли ҳукумат» платформаси) ва петрол
+   (тўғридан-тўғри алмашинувлар). Ёрқин неон ва градиентлар йўқ.
+   Шрифтлар: PT Serif / PT Sans — кирилл давлат ҳужжатлари учун
+   Паратайп томонидан давлат буюртмаси бўйича ишланган.
    ============================================================ */
 :root {
-  /* color */
-  --ink: #0a2333; /* глубокий сине-зелёный, основной текст */
-  --ink-soft: #33505f;
-  --muted: #5e7686;
-  --faint: #8fa4b1;
-  --line: rgba(10, 60, 84, 0.12);
-  --line-strong: rgba(10, 60, 84, 0.22);
+  /* --- сиёҳ ва қоғоз --- */
+  --ink: #10263a; /* асосий матн */
+  --ink-soft: #35505f;
+  --muted: #5d7385;
+  --faint: #8d9fac;
 
-  --teal: #0e8c7f; /* фирменная бирюза — действия, связи */
-  --teal-bright: #12a594;
-  --teal-deep: #0b5e6e; /* глубокий сине-зелёный акцент */
-  --green: #2ba84a; /* свежий зелёный — статусы «работает» */
-  --green-soft: #e6f5ea;
-  --amber: #c9791a;
-  --amber-soft: #fbeed7;
-
-  --bg: #f4f9fc; /* полотно страницы */
-  --sky: #eaf3f9; /* очень светлый голубой */
+  --paper: #f5f4f0; /* полотно — қоғоз */
+  --paper-2: #eeece6;
   --surface: #ffffff;
-  --surface-2: #f2f7fa;
+  --surface-2: #f7f6f3;
 
-  --abyss: #062430; /* операционный центр (тёмная секция) */
-  --abyss-2: #0a3242;
-  --on-abyss: #cfe4ec;
-  --on-abyss-dim: #7ea3b2;
+  --line: rgba(16, 38, 58, 0.14);
+  --line-strong: rgba(16, 38, 58, 0.28);
+  --rule: rgba(16, 38, 58, 0.55); /* ҳужжат чизиғи */
 
-  /* effects */
-  --glow: 0 0 0 6px rgba(18, 165, 148, 0.12), 0 0 34px rgba(18, 165, 148, 0.35);
-  --shadow-l: 0 24px 60px -28px rgba(10, 70, 100, 0.38);
-  --shadow-m: 0 14px 34px -18px rgba(10, 70, 100, 0.32);
-  --shadow-s: 0 6px 18px -10px rgba(10, 70, 100, 0.28);
+  /* --- давлат ранглари --- */
+  --gov: #14456e; /* давлат кўки — «Рақамли ҳукумат» */
+  --gov-deep: #0b2c4a;
+  --gov-soft: rgba(20, 69, 110, 0.08);
+  --brass: #a07b2c; /* герб латуни — ҳошия ва акцент */
+  --brass-soft: rgba(160, 123, 44, 0.14);
 
-  /* type */
-  --font-sans: 'Manrope', -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Arial, sans-serif;
+  --petrol: #0d6b52; /* тўғридан-тўғри алмашинув — яшил-петрол */
+  --petrol-bright: #128a68;
+  --petrol-soft: rgba(13, 107, 82, 0.1);
+
+  --live: #1c6b45; /* жорий этилган */
+  --live-soft: #e4efe8;
+  --plan: #8a5e1b; /* режада */
+  --plan-soft: #f4ecdb;
+
+  /* эски номлар — мослик учун (аста-секин олиб ташланади) */
+  --teal: var(--petrol);
+  --teal-bright: var(--petrol-bright);
+  --teal-deep: var(--gov-deep);
+  --green: var(--live);
+  --green-soft: var(--live-soft);
+  --amber: var(--plan);
+  --amber-soft: var(--plan-soft);
+  --bg: var(--paper);
+  --sky: var(--paper-2);
+
+  --abyss: #0b2233;
+  --abyss-2: #10314a;
+  --on-abyss: #d3e0e8;
+  --on-abyss-dim: #8ba2b1;
+
+  /* --- эффектлар: ҳужжат услуби, соя минимал --- */
+  --glow: none;
+  --shadow-l: 0 18px 44px -30px rgba(11, 44, 74, 0.4);
+  --shadow-m: 0 10px 26px -20px rgba(11, 44, 74, 0.34);
+  --shadow-s: 0 3px 10px -7px rgba(11, 44, 74, 0.3);
+
+  /* --- шрифтлар --- */
+  --font-display: 'PT Serif', 'Times New Roman', Georgia, serif;
+  --font-sans: 'PT Sans', -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --fs-hero: clamp(34px, 4.6vw, 62px);
-  --fs-h2: clamp(26px, 3vw, 40px);
-  --fs-h3: clamp(19px, 2vw, 24px);
-  --fs-lead: clamp(15px, 1.4vw, 18px);
+  --fs-hero: clamp(30px, 3.9vw, 52px);
+  --fs-h2: clamp(24px, 2.7vw, 36px);
+  --fs-h3: clamp(18px, 1.9vw, 23px);
+  --fs-lead: clamp(15px, 1.35vw, 17.5px);
   --fs-body: 15px;
   --fs-small: 13px;
   --fs-micro: 11px;
 
-  /* layout */
+  /* --- макет: ҳужжат геометрияси, юмшоқ бурчаклар минимал --- */
   --container: 1240px;
   --gutter: clamp(18px, 4vw, 48px);
-  --r-l: 22px;
-  --r-m: 16px;
-  --r-s: 10px;
-  --topbar-h: 68px;
+  --r-l: 5px;
+  --r-m: 4px;
+  --r-s: 3px;
+  --topbar-h: 72px;
 
-  /* motion */
+  /* --- ҳаракат --- */
   --ease: cubic-bezier(0.22, 0.61, 0.24, 1);
-  --t-fast: 0.18s;
-  --t-med: 0.34s;
-  --t-slow: 0.6s;
+  --t-fast: 0.16s;
+  --t-med: 0.3s;
+  --t-slow: 0.55s;
 }

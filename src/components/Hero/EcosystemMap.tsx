@@ -312,20 +312,11 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
         aria-label={`Интеграция харитаси, даража: ${focus.name}. Марказ атрофида ${hoverNodes.length} та тугун`}
       >
         <defs>
-          <radialGradient id="coreGlow">
-            <stop offset="0%" stopColor="#12a594" stopOpacity="0.32" />
-            <stop offset="60%" stopColor="#12a594" stopOpacity="0.1" />
-            <stop offset="100%" stopColor="#12a594" stopOpacity="0" />
-          </radialGradient>
+          {/* қоғоз устидаги медальон: оқ диск, латун ва сиёҳ ҳошия */}
           <radialGradient id="coreDisc" cx="50%" cy="38%">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="72%" stopColor="#f7fcfb" />
-            <stop offset="100%" stopColor="#dff1ed" />
+            <stop offset="100%" stopColor="#fbfaf7" />
           </radialGradient>
-          <linearGradient id="coreRing" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#12a594" />
-            <stop offset="100%" stopColor="#0b5e6e" />
-          </linearGradient>
         </defs>
 
         <g ref={layerRef} className={s.zoomLayer}>
@@ -459,11 +450,8 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             onClick={() => onOpenNode(focus, path)}
             onKeyDown={activate(() => onOpenNode(focus, path))}
           >
-            <circle className={s.coreGlow} cx={CX} cy={CY} r={152} fill="url(#coreGlow)" />
-            <g className={s.coreSpin}>
-              <circle className={s.coreDash} cx={CX} cy={CY} r={106} />
-            </g>
-            <circle cx={CX} cy={CY} r={90} fill="none" stroke="url(#coreRing)" strokeWidth="1.4" opacity="0.55" />
+            <circle className={s.coreDash} cx={CX} cy={CY} r={97} />
+            <circle className={s.coreRule} cx={CX} cy={CY} r={90} />
             <circle className={s.coreDiscC} cx={CX} cy={CY} r={82} fill="url(#coreDisc)" />
             <g className={s.coreContent} transform={`translate(${CX}, ${CY})`}>
               {atRoot ? (

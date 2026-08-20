@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type { EcoNode } from '../../lib/types'
 import { ECOSYSTEM_ROOT } from '../../data/tree'
 import { ERECEPT_ROOT } from '../../data/erecept'
+import { REGISTRY_TOTALS } from '../../data/registry'
 import { useMedia, usePrefersReducedMotion } from '../../lib/hooks'
 import { EcosystemMap } from './EcosystemMap'
 import { MobileEcosystem } from './MobileEcosystem'
-import heroBg from '../../../Ministry_of_Health_(Tashkent).jpg'
 import s from './Hero.module.css'
 
 interface Props {
@@ -13,48 +13,48 @@ interface Props {
   panelOpen: boolean
 }
 
+const T = REGISTRY_TOTALS
+
 /** Харита режимлари: идоралараро интеграция ёки «Электрон рецепт» */
 const MODES = [
-  { id: 'gov', label: 'Идоралараро интеграция', root: ECOSYSTEM_ROOT },
-  { id: 'erx', label: 'Электрон рецепт', root: ERECEPT_ROOT },
+  {
+    id: 'gov',
+    label: 'Идоралараро интеграция',
+    root: ECOSYSTEM_ROOT,
+    caption: 'Идоралараро маълумот алмашинуви харитаси',
+    facts: [
+      { v: String(T.total), k: 'алмашинув йўналиши' },
+      { v: String(T.agencies), k: 'ҳамкор идора' },
+      { v: String(T.active), k: 'жорий этилган' },
+      { v: String(T.process), k: 'режада' },
+    ],
+  },
+  {
+    id: 'erx',
+    label: 'Электрон рецепт',
+    root: ERECEPT_ROOT,
+    caption: 'Электрон рецепт тизимлари билан интеграция харитаси',
+    facts: [
+      { v: String(ERECEPT_ROOT.children?.length ?? 0), k: 'дорихона тизими' },
+      { v: 'Жорий этилган', k: 'алмашинув ҳолати' },
+    ],
+  },
 ] as const
 
 export function Hero({ onOpenNode, panelOpen }: Props) {
   const [mode, setMode] = useState<(typeof MODES)[number]['id']>('gov')
-  const root = MODES.find((m) => m.id === mode)!.root
+  const active = MODES.find((m) => m.id === mode)!
   const compact = useMedia('(max-width: 940px)')
   const reduced = usePrefersReducedMotion()
-  const finePointer = useMedia('(pointer: fine)')
-  const bgRef = useRef<HTMLDivElement>(null)
-  const mapRef = useRef<HTMLDivElement>(null)
-  const raf = useRef(0)
-
-  // лёгкий параллакс фона и карты за курсором
-  const onMove = (e: React.MouseEvent) => {
-    if (reduced || !finePointer) return
-    const { innerWidth: w, innerHeight: h } = window
-    const nx = e.clientX / w - 0.5
-    const ny = e.clientY / h - 0.5
-    cancelAnimationFrame(raf.current)
-    raf.current = requestAnimationFrame(() => {
-      if (bgRef.current) bgRef.current.style.transform = `scale(1.04) translate(${nx * -10}px, ${ny * -6}px)`
-      if (mapRef.current) mapRef.current.style.transform = `translate(${nx * 9}px, ${ny * 6}px)`
-    })
-  }
 
   return (
-    <section id="ecosystem" className={s.hero} onMouseMove={onMove}>
-      <div className={s.bg} aria-hidden="true">
-        <div ref={bgRef} className={s.bgImgWrap}>
-          <img className={s.bgImg} src={heroBg} alt="" />
-        </div>
-        <div className={s.bgHaze} />
-      </div>
+    <section id="ecosystem" className={s.hero}>
+      <div className={s.canvas} aria-hidden="true" />
 
       <div className={s.inner}>
         <div className={s.mapHead}>
-          <span className={s.mapEyebrow}>Ўзбекистон Республикаси</span>
           <h1 className={s.mapTitle}>Соғлиқни сақлаш вазирлиги</h1>
+          <p className={s.mapCaption}>{active.caption}</p>
           <div className={s.modeSwitch} role="tablist" aria-label="Харита режими">
             {MODES.map((m) => (
               <button
@@ -70,14 +70,34 @@ export function Hero({ onOpenNode, panelOpen }: Props) {
           </div>
         </div>
 
-        <div ref={mapRef} className={s.mapLayer}>
+        <div className={s.mapLayer}>
           {compact ? (
-            <MobileEcosystem key={mode} root={root} onOpenNode={onOpenNode} />
+            <MobileEcosystem key={mode} root={active.root} onOpenNode={onOpenNode} />
           ) : (
-            <EcosystemMap key={mode} root={root} onOpenNode={onOpenNode} panelOpen={panelOpen} reduced={reduced} />
+            <EcosystemMap
+              key={mode}
+              root={active.root}
+              onOpenNode={onOpenNode}
+              panelOpen={panelOpen}
+              reduced={reduced}
+            />
           )}
         </div>
 
+        {/* ҳужжат таги: кўрсаткичлар ва манба */}
+        <footer className={s.sheetFoot}>
+          <dl className={s.facts}>
+            {active.facts.map((f) => (
+              <div key={f.k} className={s.fact}>
+                <dt className={s.factV}>{f.v}</dt>
+                <dd className={s.factK}>{f.k}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className={s.source}>
+            Манба: «Интеграция қилинадиган АТлар» реестри · 30.03.2026 ҳолатига
+          </p>
+        </footer>
       </div>
     </section>
   )

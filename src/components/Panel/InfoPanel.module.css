@@ -5,9 +5,7 @@
   position: fixed;
   inset: 0;
   z-index: 90;
-  background: rgba(6, 36, 48, 0.42);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(11, 44, 74, 0.34);
   display: flex;
   justify-content: flex-end;
   animation: ovIn 0.28s var(--ease);
@@ -27,7 +25,8 @@
   background: var(--surface);
   display: flex;
   flex-direction: column;
-  box-shadow: -30px 0 80px -30px rgba(4, 30, 42, 0.5);
+  border-left: 1px solid var(--line-strong);
+  box-shadow: -24px 0 60px -34px rgba(11, 44, 74, 0.45);
   animation: panelIn 0.34s var(--ease);
 }
 @keyframes panelIn {
@@ -43,9 +42,10 @@
 
 /* ---------- шапка ---------- */
 .head {
-  padding: 20px 26px 18px;
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  padding: 18px 26px 18px;
+  border-bottom: 1px solid var(--line-strong);
+  border-top: 3px solid var(--brass);
+  background: var(--surface);
   flex: none;
 }
 .headTop {
@@ -59,12 +59,12 @@
   font-size: 10.5px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--muted);
 }
 .close {
-  width: 38px;
-  height: 38px;
-  border-radius: 11px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-s);
   display: grid;
   place-items: center;
   color: var(--muted);
@@ -85,15 +85,15 @@
   margin-top: 14px;
 }
 .headIcon {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   flex: none;
-  border-radius: 15px;
-  background: linear-gradient(135deg, var(--teal-deep), var(--teal-bright));
-  color: #fff;
+  border-radius: var(--r-s);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  color: var(--gov-deep);
   display: grid;
   place-items: center;
-  box-shadow: var(--shadow-s);
 }
 .headLogo {
   width: 78%;
@@ -101,10 +101,11 @@
   object-fit: contain;
 }
 .title {
-  font-size: clamp(20px, 2.4vw, 26px);
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
+  font-family: var(--font-display);
+  font-size: clamp(19px, 2.2vw, 25px);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
 }
 .tagline {
   margin-top: 12px;
@@ -131,12 +132,14 @@
 
 .bTitle {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.18em;
+  font-size: 10px;
+  letter-spacing: 0.19em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--muted);
   font-weight: 600;
   margin-bottom: 12px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--line);
 }
 
 .bGroup {
@@ -150,18 +153,26 @@
   gap: 10px;
 }
 .bKpi {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--gov-deep);
   border-radius: var(--r-s);
-  padding: 12px 14px;
+  padding: 11px 14px;
 }
 .bKpiValue {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--teal-deep);
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+/* қисқа сонли қиймат — йирикроқ (жадвал рақами) */
+.bKpiNum {
+  font-size: 21px;
+  font-variant-numeric: tabular-nums;
 }
 .bKpiLabel {
   display: block;
@@ -182,9 +193,9 @@
   align-items: center;
   gap: 8px;
   padding: 7px 12px;
-  border-radius: 20px;
-  background: var(--sky);
-  border: 1px solid rgba(11, 94, 110, 0.14);
+  border-radius: var(--r-s);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-soft);
@@ -195,7 +206,7 @@
   font-size: 9.5px;
   letter-spacing: 0.06em;
   padding: 2px 7px;
-  border-radius: 10px;
+  border-radius: var(--r-s);
 }
 .st_live {
   background: var(--green-soft);
@@ -265,7 +276,7 @@
 .bBarTrack {
   height: 8px;
   border-radius: 6px;
-  background: var(--sky);
+  background: var(--surface-2);
   overflow: hidden;
 }
 .bBarTrack i {
@@ -306,7 +317,7 @@
   align-items: center;
   gap: 9px;
   padding: 8px 13px;
-  border-radius: 11px;
+  border-radius: var(--r-s);
   background: var(--surface-2);
   border: 1px solid var(--line);
   font-size: 12.5px;
@@ -370,12 +381,12 @@
   border-radius: var(--r-m);
 }
 .bGraphEdge {
-  stroke: rgba(14, 140, 127, 0.3);
+  stroke: rgba(13, 107, 82, 0.4);
   stroke-width: 1.3;
 }
 .bGraphNode {
   fill: #fff;
-  stroke: rgba(11, 94, 110, 0.25);
+  stroke: var(--line-strong);
 }
 .bGraphText {
   font-size: 12px;
@@ -412,8 +423,8 @@
   gap: 12px;
   padding: 13px 16px;
   border-radius: var(--r-s);
-  border: 1px solid rgba(11, 94, 110, 0.16);
-  background: linear-gradient(90deg, rgba(18, 165, 148, 0.08), rgba(18, 165, 148, 0.02));
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
 }
 .bStackLayer b {
   font-size: 14px;
@@ -431,7 +442,7 @@
   gap: 10px;
   align-self: flex-start;
   padding: 12px 18px;
-  border-radius: 12px;
+  border-radius: var(--r-s);
   background: var(--teal-deep);
   color: #fff;
   font-size: 13.5px;
@@ -460,8 +471,8 @@
   align-items: center;
   gap: 9px;
   padding: 9px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(11, 94, 110, 0.25);
+  border-radius: var(--r-s);
+  border: 1px solid var(--line-strong);
   background: var(--surface);
   color: var(--teal-deep);
   font-size: 13px;
@@ -471,7 +482,7 @@
     border-color var(--t-fast) var(--ease);
 }
 .relatedChip:hover {
-  background: var(--sky);
+  background: var(--surface-2);
   border-color: var(--teal);
 }
 
