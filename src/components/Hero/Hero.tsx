@@ -6,6 +6,7 @@ import { REGISTRY_TOTALS } from '../../data/registry'
 import { useMedia, usePrefersReducedMotion } from '../../lib/hooks'
 import { EcosystemMap } from './EcosystemMap'
 import { MobileEcosystem } from './MobileEcosystem'
+import heroBg from '../../../Ministry_of_Health_(Tashkent).jpg'
 import s from './Hero.module.css'
 
 interface Props {
@@ -49,7 +50,10 @@ export function Hero({ onOpenNode, panelOpen }: Props) {
 
   return (
     <section id="ecosystem" className={s.hero}>
-      <div className={s.canvas} aria-hidden="true" />
+      <div className={s.bg} aria-hidden="true">
+        <img className={s.bgImg} src={heroBg} alt="" />
+        <div className={s.bgHaze} />
+      </div>
 
       <div className={s.inner}>
         <div className={s.mapHead}>
@@ -94,9 +98,6 @@ export function Hero({ onOpenNode, panelOpen }: Props) {
               </div>
             ))}
           </dl>
-          <p className={s.source}>
-            Манба: «Интеграция қилинадиган АТлар» реестри · 30.03.2026 ҳолатига
-          </p>
         </footer>
       </div>
     </section>
