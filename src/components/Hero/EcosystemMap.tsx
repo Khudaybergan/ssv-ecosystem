@@ -2,9 +2,11 @@
    Drill-down интеграция харитаси (desktop).
 
    Илдиз: марказда ССВ герби, атрофида — реестр бўйича ҳамкор
-   идоралар. Тўғридан-тўғри алмашинувлар — марказга яшил чизиқ;
-   «Рақамли ҳукумат» платформаси орқали ўтадиганлари — ўнгдаги
-   платформа хабидан ўтувчи кўк тармоқлар (шина схемаси).
+   идоралар. Барча алоқалар радиал: тўғридан-тўғри алмашинувлар —
+   яшил чизиқлар; «Рақамли ҳукумат» платформаси орқали ўтадиганлари —
+   ўнг сектордаги кўк дуга-шлюзни тешиб ўтувчи кўк чизиқлар
+   (кесишган жойда порт-нуқта). Дуга — платформанинг ўзи
+   (илдизда босса — ичига киради).
    Идорани босганда у марказга ўтади ва алмашинув йўналишлари
    (барглар) очилади; барг ва марказ панелни очади.
    Қайтиш — крошкалар, ← ёки Esc.
@@ -25,144 +27,115 @@ interface NodeLayout {
   x: number
   y: number
   r: number
-  /** Толщина прямой линии (px) — весомее у идор с бо́льшим числом интеграций */
+  /** Толщина линии связи (px) — весомее у идор с бо́льшим числом интеграций */
   ew: number
-  /** Прямая связь с центром (null — все обмены идут через платформу) */
-  edge: string | null
-  /** Толщина ветки через платформу */
-  viaEw: number
-  /** Ветка узел → платформа-хаб (null — прямых via-обменов нет) */
-  viaEdge: string | null
+  edge: string
+  /** Обмены узла идут через платформу (линия синяя, сквозь дугу-шлюз) */
+  isVia: boolean
+  /** Точка пересечения линии с дугой-шлюзом */
+  port: { x: number; y: number } | null
   pulseDur: number
 }
 
-interface HubLayout {
-  /** Корневой узел «Рақамли ҳукумат» (кликабелен) или null — декоративный хаб уровня */
+interface GateLayout {
+  /** Корневой узел «Рақамли ҳукумат» (кликабелен) или null — декоративный шлюз уровня */
   n: EcoNode | null
-  x: number
-  y: number
-  r: number
-  /** Магистраль хаб → центр */
-  trunk: string
-  trunkEw: number
-  /** Направления через платформу на этом уровне (для магистрали) */
+  /** Дуга-шлюз (эллиптическая) */
+  arc: string
+  /** Медальон с логотипом на дуге */
+  mx: number
+  my: number
+  mr: number
+  /** Собственные обмены платформы (бейдж на медальоне) */
   count: number
-  hasIn: boolean
-  hasOut: boolean
 }
 
 interface LevelLayout {
   ring: NodeLayout[]
-  hub: HubLayout | null
+  gate: GateLayout | null
 }
 
 /** Сколько обменов узла идёт через платформу «Рақамли ҳукумат» */
 const viaCountOf = (n: EcoNode) => (n.children ? n.children.filter((k) => k.via).length : n.via ? 1 : 0)
 
-/** Даража жойлашуви: битта ҳалқа; via-гуруҳ ўнгда, платформа хаби улар билан марказ орасида. */
+/** Даража жойлашуви: битта радиал ҳалқа; via-гуруҳ ўнгда (0° атрофида),
+    улар йўлида — «Рақамли ҳукумат» дуга-шлюзи. */
 function layoutLevel(focus: EcoNode): LevelLayout {
   const all = focus.children ?? []
-  // «Рақамли ҳукумат» ҳалқада турмайди — у платформа хаби бўлади
-  const hubNode = all.find((n) => n.id === 'ag-rh') ?? null
-  const rest = all.filter((n) => n !== hubNode)
+  // «Рақамли ҳукумат» ҳалқада турмайди — у дуга-шлюз бўлади
+  const gateNode = all.find((n) => n.id === 'ag-rh') ?? null
+  const rest = all.filter((n) => n !== gateNode)
   const viaKids = rest.filter((n) => viaCountOf(n) > 0)
   const dirKids = rest.filter((n) => viaCountOf(n) === 0)
-  const hasHub = Boolean(hubNode) || viaKids.length > 0
-  const kids = hasHub ? [...viaKids, ...dirKids] : rest
+  const hasGate = Boolean(gateNode) || viaKids.length > 0
+  const kids = hasGate ? [...viaKids, ...dirKids] : rest
   const c = kids.length
   const rx = c <= 3 ? 300 : c <= 4 ? 350 : c <= 5 ? 405 : c <= 6 ? 450 : c <= 8 ? 495 : c <= 12 ? 512 : c <= 18 ? 520 : 526
   const ry = c <= 3 ? 168 : c <= 4 ? 192 : c <= 5 ? 216 : c <= 6 ? 236 : c <= 8 ? 252 : c <= 12 ? 262 : c <= 18 ? 268 : 274
   // катта ҳалқаларда тугунлар ихчамроқ (26 тагача сиғади)
   const baseR = c <= 8 ? 34 : kids.some((n) => n.icon) ? 28 : c <= 12 ? 26 : c <= 18 ? 24 : 21
   const step = 360 / Math.max(c, 1)
-  // via-гуруҳ юқори ўнг секторда (хаб биссектрисаси −44° атрофида марказлашган);
-  // дуга разведена на два подсектора, между ними «чистая полоса» (lane) под
-  // хаб и магистраль; хабсиз даража — аввалгидек
-  const HUB_DEG = -44
   const nVia = viaKids.length
-  const S = (nVia - 1) * step
-  const start = hasHub && nVia > 0 ? HUB_DEG - S / 2 : c === 2 ? 0 : -90
-  const lane = Math.min(84, Math.max(24, 56 - nVia * 2))
-  const nUp = Math.ceil(nVia / 2)
-  const nLo = nVia - nUp
-  const viaAngle = (i: number) => {
-    const upEnd = HUB_DEG - lane / 2
-    const loStart = HUB_DEG + lane / 2
-    const a1 = HUB_DEG + S / 2
-    if (i < nUp) return nUp === 1 ? (start + upEnd) / 2 : start + ((upEnd - start) * i) / (nUp - 1)
-    const j = i - nUp
-    return nLo === 1 ? (loStart + a1) / 2 : loStart + ((a1 - loStart) * j) / (nLo - 1)
-  }
+  // via-блок марказлашган ўнгда (0°); шлюзсиз даража — аввалгидек
+  const start = hasGate && nVia > 0 ? -((nVia - 1) * step) / 2 : c === 2 ? 0 : -90
   const k = c <= 8 ? 0.08 : 0.05
-  const hubA = (HUB_DEG * Math.PI) / 180
-  const hubF = hubNode ? 0.86 : 0.62
-  const hub: HubLayout | null = hasHub
-    ? {
-        n: hubNode,
-        x: CX + rx * hubF * Math.cos(hubA),
-        y: CY + ry * hubF * Math.sin(hubA),
-        r: hubNode ? 36 : 27,
-        trunk: '',
-        trunkEw: 0,
-        count: 0,
-        hasIn: false,
-        hasOut: false,
-      }
-    : null
+  // дуга-шлюз радиуслари (ядро ва ҳалқа орасида)
+  const gate = { x: rx * 0.55, y: ry * Math.max(0.58, 120 / ry) }
+  const gatePoint = (deg: number) => {
+    const t = (deg * Math.PI) / 180
+    return { x: CX + gate.x * Math.cos(t), y: CY + gate.y * Math.sin(t) }
+  }
   // вес тугуна = интеграциялар сони: кўп интеграцияли идора йирикроқ ва йўғонроқ чизиқли
   const counts = kids.map((n) => n.children?.length ?? 0)
   const maxCount = Math.max(...counts, 1)
   const weighted = maxCount > 1
-  const wOf = (m: number) => (weighted ? (m / maxCount) ** 0.55 : 0)
   const ring = kids.map((n, i) => {
-    const angDeg = hasHub && nVia > 0 && i < nVia ? viaAngle(i) : start + step * i
-    const a = (angDeg * Math.PI) / 180
+    const a = ((start + step * i) * Math.PI) / 180
     // 19+ тугунда ҳалқа икки қаватли: жуфтлари ичкарироқ — ёзувлар тиқилмайди
     const st = c > 18 && i % 2 === 0 ? 0.78 : 1
     const x = CX + rx * st * Math.cos(a)
     const y = CY + ry * st * Math.sin(a)
-    const total = Math.max(n.children?.length ?? 1, 1)
-    const viaN = hub ? Math.min(viaCountOf(n), total) : 0
-    const dirN = total - viaN
-    const r = baseR - 2 + wOf(counts[i]) * 13
-    let edge: string | null = null
-    if (dirN > 0) {
+    const w = weighted ? (counts[i] / maxCount) ** 0.55 : 0
+    const r = baseR - 2 + w * 13
+    const isVia = hasGate && i < nVia
+    let edge: string
+    let port: { x: number; y: number } | null = null
+    if (isVia) {
+      // via-линия прямая — пересекает дугу-шлюз точно в порту
+      edge = `M${x.toFixed(1)},${y.toFixed(1)} L${CX},${CY}`
+      const dx = x - CX
+      const dy = y - CY
+      const tau = 1 / Math.sqrt((dx / gate.x) ** 2 + (dy / gate.y) ** 2)
+      port = { x: CX + dx * tau, y: CY + dy * tau }
+    } else {
       const mx = (x + CX) / 2 + (CY - y) * k
       const my = (y + CY) / 2 + (x - CX) * k
       edge = `M${x.toFixed(1)},${y.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${CX},${CY}`
     }
-    let viaEdge: string | null = null
-    if (hub && viaN > 0) {
-      // ветка выгнута от центра, чтобы огибать ядро
-      const mx = (x + hub.x) / 2
-      const my = (y + hub.y) / 2
-      const qx = mx + (mx - CX) * 0.22
-      const qy = my + (my - CY) * 0.22
-      viaEdge = `M${x.toFixed(1)},${y.toFixed(1)} Q${qx.toFixed(1)},${qy.toFixed(1)} ${hub.x.toFixed(1)},${hub.y.toFixed(1)}`
-      hub.count += viaN
-      const d = n.dir
-      if (d === 'in' || d === 'both') hub.hasIn = true
-      if (d === 'out' || d === 'both' || !d) hub.hasOut = true
-    }
-    return {
-      n,
-      x,
-      y,
-      r,
-      ew: 1 + wOf(dirN) * 3.2,
-      edge,
-      viaEw: 1.7 + wOf(viaN) * 3.2,
-      viaEdge,
-      pulseDur: 2.4 + (i % 4) * 0.45,
-    }
+    return { n, x, y, r, ew: 1 + w * 3.2, edge, isVia, port, pulseDur: 2.4 + (i % 4) * 0.45 }
   })
-  if (hub) {
-    hub.count += hubNode?.children?.length ?? 0
-    if (hubNode) hub.hasOut = true
-    hub.trunk = `M${hub.x.toFixed(1)},${hub.y.toFixed(1)} L${CX},${CY}`
-    hub.trunkEw = 2.6 + Math.min(3.4, hub.count * 0.12)
+  let gateL: GateLayout | null = null
+  if (hasGate) {
+    const padDeg = Math.min(14, Math.max(6, step * 0.4))
+    const s0 = nVia > 0 ? start : 0
+    const s1 = nVia > 0 ? start + step * (nVia - 1) : 0
+    const P0 = gatePoint(s0 - padDeg)
+    const P1 = gatePoint(s1 + padDeg)
+    const large = s1 - s0 + 2 * padDeg > 180 ? 1 : 0
+    // медальон — в свободном промежутке между портами: при нечётном числе
+    // via-узлов средний порт стоит на 0°, сдвигаемся на полшага; при
+    // единственном узле остаёмся на 0° — линия проходит сквозь медальон
+    const m = gatePoint(nVia % 2 === 1 && nVia > 1 ? step / 2 : 0)
+    gateL = {
+      n: gateNode,
+      arc: `M${P0.x.toFixed(1)},${P0.y.toFixed(1)} A${gate.x.toFixed(1)},${gate.y.toFixed(1)} 0 ${large} 1 ${P1.x.toFixed(1)},${P1.y.toFixed(1)}`,
+      mx: m.x,
+      my: m.y,
+      mr: gateNode ? 27 : 20,
+      count: gateNode?.children?.length ?? 0,
+    }
   }
-  return { ring, hub }
+  return { ring, gate: gateL }
 }
 
 /** Марказ доирасидаги ном: ~14 белгидан тўрт сатргача (узун номлар кичикроқ шрифтда). */
@@ -199,31 +172,33 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
   const focus = path[path.length - 1]
   const depth = path.length - 1
   const atRoot = depth === 0
-  const { ring, hub } = useMemo(() => layoutLevel(focus), [focus])
+  const { ring, gate } = useMemo(() => layoutLevel(focus), [focus])
 
-  // корневой узел платформы рисуем как обычный узел, но на позиции хаба
-  const hubAsNode: NodeLayout | null =
-    hub && hub.n
-      ? { n: hub.n, x: hub.x, y: hub.y, r: hub.r, ew: 0, edge: null, viaEw: 0, viaEdge: null, pulseDur: 3 }
+  // корневой узел платформы участвует в hover/tooltip как псевдо-узел на медальоне
+  const gateAsNode: NodeLayout | null =
+    gate && gate.n
+      ? { n: gate.n, x: gate.mx, y: gate.my, r: gate.mr, ew: 0, edge: '', isVia: false, port: null, pulseDur: 3 }
       : null
-  const drawNodes = hubAsNode ? [...ring, hubAsNode] : ring
-  const hubId = hub ? (hub.n ? hub.n.id : 'via-hub') : null
+  const hoverNodes = gateAsNode ? [...ring, gateAsNode] : ring
+  const gateId = gate?.n?.id ?? null
 
-  const hoveredL = hover && hover !== 'core' ? drawNodes.find((l) => l.n.id === hover) : null
+  const hoveredL = hover && hover !== 'core' ? hoverNodes.find((l) => l.n.id === hover) : null
 
   const stateOf = (id: string) => {
     if (!hover) return ''
     if (hover === 'core') return s.rel
     return id === hover ? s.hot : s.dim
   }
-  // магистраль «горит», когда навели на платформу или на узел, чьи ветки идут через неё
-  const trunkState = !hover
+  // шлюз «соотносится» с наведённым via-узлом (его данные проходят сквозь дугу)
+  const gateState = !hover
     ? ''
     : hover === 'core'
       ? s.rel
-      : hover === hubId || ring.find((l) => l.n.id === hover)?.viaEdge
+      : gateId && hover === gateId
         ? s.hot
-        : s.dim
+        : hoverNodes.find((l) => l.n.id === hover)?.isVia
+          ? s.rel
+          : s.dim
 
   /* ---------- даражалар орасидаги ўтишлар ---------- */
   const animate = (out: { origin: string; scale: number }, swap: () => void, inFrom: number) => {
@@ -334,7 +309,7 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
         className={`${s.mapSvg} ${hover ? s.hasHover : ''}`}
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         role="group"
-        aria-label={`Интеграция харитаси, даража: ${focus.name}. Марказ атрофида ${drawNodes.length} та тугун`}
+        aria-label={`Интеграция харитаси, даража: ${focus.name}. Марказ атрофида ${hoverNodes.length} та тугун`}
       >
         <defs>
           <radialGradient id="coreGlow">
@@ -365,77 +340,111 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             />
           )}
 
-          {/* магистраль: платформа-хаб → ССВ маркази */}
-          {hub && (
-            <g className={`${s.edgeGroup} ${trunkState}`} style={{ '--ew': `${hub.trunkEw.toFixed(1)}px` } as React.CSSProperties}>
-              <path className={s.edgeCasing} d={hub.trunk} />
-              <path id="edge-trunk" className={s.edgeTrunk} d={hub.trunk} />
-              <g className={s.pulses}>
-                {[0, 1, 2].map((j) => (
-                  <circle key={j} className={s.pulseDotVia} r={3}>
-                    <animateMotion
-                      dur={`${2 + j * 0.4}s`}
-                      begin={`${(-j * 0.9).toFixed(2)}s`}
-                      repeatCount="indefinite"
-                      keyPoints={hub.hasIn && hub.hasOut ? (j === 1 ? '0;1' : '1;0') : hub.hasIn ? '0;1' : '1;0'}
-                      keyTimes="0;1"
-                    >
-                      <mpath href="#edge-trunk" />
-                    </animateMotion>
-                  </circle>
-                ))}
-              </g>
-            </g>
-          )}
-
           {/* алоқалар + маълумот пульслари (режадагилар — пунктир, пульссиз) */}
           {ring.map((l, i) => (
             <g
               key={l.n.id}
               className={`${s.edgeGroup} ${l.n.status === 'plan' && !l.n.children?.length ? s.edgePlan : ''} ${stateOf(l.n.id)}`}
-              style={{ '--ew': `${l.ew.toFixed(1)}px`, '--vew': `${l.viaEw.toFixed(1)}px` } as React.CSSProperties}
+              style={{ '--ew': `${l.ew.toFixed(1)}px` } as React.CSSProperties}
             >
-              {l.edge && <path id={`edge-${l.n.id}`} className={s.edge} d={l.edge} />}
-              {/* ветка через платформу «Рақамли ҳукумат» (белая подложка отделяет от фото) */}
-              {l.viaEdge && <path className={s.edgeViaCasing} d={l.viaEdge} />}
-              {l.viaEdge && <path id={`via-${l.n.id}`} className={s.edgeVia} d={l.viaEdge} />}
+              {/* via-линия — синяя на белой подложке, прямая сквозь дугу-шлюз */}
+              {l.isVia && !(l.n.status === 'plan' && !l.n.children?.length) && (
+                <path className={s.edgeCasing} d={l.edge} />
+              )}
+              <path id={`edge-${l.n.id}`} className={l.isVia ? s.edgeVia : s.edge} d={l.edge} />
               <g className={s.pulses}>
                 {/* Барг даражасида: барг доирасида ССВ тизими белгиси, марказда — идора.
                     out (ССВ → идора): барг → марказ; in (идора → ССВ): марказ → барг.
                     dir йўқ (илдиз: идоралар, э-рецепт ҳамкорлари) — оқим марказдан
                     ташқарига: ССВдан чиқаётган маълумот. */}
-                {l.edge &&
-                  [0, 1].map((j) => (
-                    <circle key={j} className={s.pulseDot} r={l.r > 30 ? 3.1 : 2.6}>
-                      <animateMotion
-                        dur={`${l.pulseDur + j * 0.7}s`}
-                        begin={`${(-(i * 0.53) - j * (l.pulseDur / 2)).toFixed(2)}s`}
-                        repeatCount="indefinite"
-                        keyPoints={l.n.dir === 'in' ? '1;0' : l.n.dir === 'both' && j === 1 ? '1;0' : l.n.dir ? '0;1' : '1;0'}
-                        keyTimes="0;1"
-                      >
-                        <mpath href={`#edge-${l.n.id}`} />
-                      </animateMotion>
-                    </circle>
-                  ))}
-                {/* ветка via: путь узел → хаб; in — к хабу, иначе — от хаба к узлу */}
-                {l.viaEdge &&
-                  [0, 1].map((j) => (
-                    <circle key={`v${j}`} className={s.pulseDotVia} r={3}>
-                      <animateMotion
-                        dur={`${1.9 + (i % 3) * 0.4 + j * 0.6}s`}
-                        begin={`${(-(i * 0.47) - j * 1.1).toFixed(2)}s`}
-                        repeatCount="indefinite"
-                        keyPoints={l.n.dir === 'in' ? '0;1' : '1;0'}
-                        keyTimes="0;1"
-                      >
-                        <mpath href={`#via-${l.n.id}`} />
-                      </animateMotion>
-                    </circle>
-                  ))}
+                {[0, 1].map((j) => (
+                  <circle key={j} className={l.isVia ? s.pulseDotVia : s.pulseDot} r={l.r > 30 ? 3.1 : 2.6}>
+                    <animateMotion
+                      dur={`${l.pulseDur + j * 0.7}s`}
+                      begin={`${(-(i * 0.53) - j * (l.pulseDur / 2)).toFixed(2)}s`}
+                      repeatCount="indefinite"
+                      keyPoints={l.n.dir === 'in' ? '1;0' : l.n.dir === 'both' && j === 1 ? '1;0' : l.n.dir ? '0;1' : '1;0'}
+                      keyTimes="0;1"
+                    >
+                      <mpath href={`#edge-${l.n.id}`} />
+                    </animateMotion>
+                  </circle>
+                ))}
               </g>
             </g>
           ))}
+
+          {/* дуга-шлюз «Рақамли ҳукумат» — на пути via-линий */}
+          {gate && (
+            <g
+              className={`${s.gate} ${gateState}`}
+              {...(gate.n
+                ? {
+                    role: 'button',
+                    tabIndex: 0,
+                    'aria-label': `${gate.n.name}. ${gate.n.desc} Ичида ${gate.count} та йўналиш.`,
+                    onMouseEnter: () => setHover(gate.n!.id),
+                    onMouseLeave: () => setHover(null),
+                    onFocus: () => setHover(gate.n!.id),
+                    onBlur: () => setHover(null),
+                    onClick: () => drill(gateAsNode!),
+                    onKeyDown: activate(() => drill(gateAsNode!)),
+                  }
+                : { 'aria-hidden': true as const })}
+            >
+              <path className={s.gateArcCasing} d={gate.arc} />
+              <path className={s.gateArc} d={gate.arc} />
+            </g>
+          )}
+
+          {/* порты — точки пересечения via-линий с дугой (поверх дуги) */}
+          {ring
+            .filter((l) => l.port)
+            .map((l) => (
+              <circle
+                key={`port-${l.n.id}`}
+                className={`${s.gatePort} ${stateOf(l.n.id)}`}
+                cx={l.port!.x.toFixed(1)}
+                cy={l.port!.y.toFixed(1)}
+                r={gate?.n ? 4.5 : 3.4}
+              />
+            ))}
+
+          {/* медальон шлюза: логотип, бейдж, подпись */}
+          {gate && (
+            <g
+              className={`${s.gateMed} ${gateState}`}
+              transform={`translate(${gate.mx.toFixed(1)}, ${gate.my.toFixed(1)})`}
+              {...(gate.n
+                ? {
+                    role: 'button',
+                    tabIndex: -1,
+                    onMouseEnter: () => setHover(gate.n!.id),
+                    onMouseLeave: () => setHover(null),
+                    onClick: () => drill(gateAsNode!),
+                  }
+                : {})}
+            >
+              <circle className={s.gateMedallion} r={gate.mr} />
+              <g transform={`translate(${-gate.mr * 0.56}, ${-gate.mr * 0.56})`}>
+                <AgencyLogoSvg id="rh" size={gate.mr * 1.12} />
+              </g>
+              {gate.n && gate.count > 0 && (
+                <g transform={`translate(${gate.mr * 0.74}, ${-gate.mr * 0.74})`}>
+                  <circle className={s.nodeBadge} r="10.5" />
+                  <text className={s.nodeBadgeText} textAnchor="middle" dy="3.5">
+                    {gate.count}
+                  </text>
+                </g>
+              )}
+              <text className={s.gateLabel} y={gate.mr + 17} textAnchor="middle">
+                «Рақамли ҳукумат»
+              </text>
+              <text className={s.gateLabelSub} y={gate.mr + 31} textAnchor="middle">
+                интеграция платформаси
+              </text>
+            </g>
+          )}
 
           {/* марказ — жорий тугун */}
           <g
@@ -501,11 +510,11 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             </g>
           </g>
 
-          {/* даража тугунлари (илдизда охиргиси — платформа хаби) */}
-          {drawNodes.map((l) => (
+          {/* даража тугунлари */}
+          {ring.map((l) => (
             <g
               key={l.n.id}
-              className={`${s.node} ${l.r < 28 ? s.nodeSm : ''} ${l.r < 24 ? s.nodeXs : ''} ${l.n.status === 'plan' && !l.n.children?.length ? s.nodePlan : ''} ${l.n.id === hubId ? s.hubNode : ''} ${stateOf(l.n.id)}`}
+              className={`${s.node} ${l.r < 28 ? s.nodeSm : ''} ${l.r < 24 ? s.nodeXs : ''} ${l.n.status === 'plan' && !l.n.children?.length ? s.nodePlan : ''} ${stateOf(l.n.id)}`}
               transform={`translate(${l.x.toFixed(1)}, ${l.y.toFixed(1)})`}
               role="button"
               tabIndex={0}
@@ -519,7 +528,6 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
             >
               <g className={s.nodeScale}>
                 <circle className={s.nodeHalo} r={l.r + 12} />
-                {l.n.id === hubId && <circle className={s.hubHalo} r={l.r + 7} />}
                 <circle className={s.nodeBody} r={l.r} />
                 {l.n.icon ? (
                   <g transform={`translate(${-l.r * 0.56}, ${-l.r * 0.56})`} className={s.nodeIcon}>
@@ -578,29 +586,11 @@ export function EcosystemMap({ root, onOpenNode, panelOpen, reduced }: Props) {
               </g>
             </g>
           ))}
-
-          {/* декоратив платформа-хаб (ички даражаларда) — тугунлардан кейин,
-              яқин ёзувлар устидан тоза кўриниши учун */}
-          {hub && !hub.n && (
-            <g className={`${s.hubMini} ${trunkState}`} transform={`translate(${hub.x.toFixed(1)}, ${hub.y.toFixed(1)})`}>
-              <circle className={s.hubHalo} r={hub.r + 8} />
-              <circle className={s.hubBody} r={hub.r} />
-              <g transform={`translate(${-hub.r * 0.56}, ${-hub.r * 0.56})`}>
-                <AgencyLogoSvg id="rh" size={hub.r * 1.12} />
-              </g>
-              <text className={s.hubLabel} y={hub.r + 17} textAnchor="middle">
-                «Рақамли ҳукумат»
-              </text>
-              <text className={s.hubSub} y={hub.r + 30} textAnchor="middle">
-                интеграция платформаси
-              </text>
-            </g>
-          )}
         </g>
       </svg>
 
-      {/* легенда типов линий — плашка в правом верхнем углу карты */}
-      {hub && (
+      {/* легенда типов линий — плашка в левом нижнем углу карты */}
+      {gate && (
         <div className={s.legendBox} aria-hidden="true">
           <span className={s.legendItem}>
             <i className={`${s.legendSwatch} ${s.legendSwatchDirect}`} />
